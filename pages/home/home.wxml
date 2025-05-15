@@ -1,0 +1,35 @@
+<!--home.wxml-->
+<navigation-bar title="首页" back="{{false}}" color="black"></navigation-bar>
+<view class="homeView">
+  <view class="header">
+    <view class="header-title">采价系统</view>
+    <view class="logOut" bindtap="logOut" wx:if="{{token}}">
+      <view class="userName">{{userInfo.userName}}</view>
+      <t-icon slot="suffix" name="logout" size="48rpx" data-name="logout" />
+    </view>
+  </view>
+  <image class="homeImage" src="/pages/images/home.png"></image>
+  <view class="home-content">
+    <view class="home-item largeAmountSalePlan" wx:for="{{menuList[userInfo.roleCode]}}" wx:key="index"  catch:tap="jumpPage" data-url="{{item.path}}">
+      <view class="flex1" >
+        <image class="home-item-image" src="{{item.icon}}"></image>
+        <view class="home-item-title priceAcquisitionTask-title">{{item.menuName}}</view>
+      </view>
+      <view class="home-item-tips priceAcquisitionTask-tips" wx:if="{{item.rightIcon && item.length > 0}}">
+        <t-icon name="{{item.rightIcon}}" size="80rpx" color="#E7A927" data-name="alarm" />
+        <view>{{item.rightLabel}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+<t-dialog
+  visible="{{showConfirm}}"
+  title="登录提示"
+  content="该功能需登录后使用"
+  confirm-btn="{{ confirmBtn }}"
+  cancel-btn="暂不登录"
+  button-layout="vertical"
+  bind:confirm="confirmDelete"
+  bind:cancel="closeDialog"
+/>
+<custom-tabBar selected="{{0}}" />

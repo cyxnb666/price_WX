@@ -1,0 +1,30 @@
+var filter = {
+    pickerFilter: function (id, key, name, arr) {
+        if (arr && arr.length > 0) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i][key] === id) {
+                    return arr[i][name]
+                }
+            }
+        }
+        return '请选择'
+    },
+    specsFilter: function (id, arr) {
+        if (arr && arr.length > 0) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].specsId === id) {
+                    var label = arr[i].fvSpecsMin + arr[i].fvSpecsUnit + '-' + arr[i].fvSpecsMax + arr[i].fvSpecsUnit
+                    if (arr[i].fvSpecsMin === null) {
+                        label = arr[i].fvSpecsMax + arr[i].fvSpecsUnit + '以下'
+                    }
+                    if (arr[i].fvSpecsMax === null) {
+                        label = arr[i].fvSpecsMin + arr[i].fvSpecsUnit + '以上'
+                    }
+                    return label
+                }
+            }
+        }
+        return '请选择'
+    }
+}
+module.exports = {pickerFilter: filter.pickerFilter, specsFilter: filter.specsFilter};

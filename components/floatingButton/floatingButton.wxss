@@ -1,0 +1,68 @@
+/* back-home.wxss */
+.backHome {
+    position: fixed;
+    z-index: 90000000;
+    background-color: #777777;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 50px;
+}
+
+
+.q-waitpage-box{
+  width: 620rpx;
+  height: calc(100vh - 200rpx);
+  background: #fff;
+  margin: 82rpx auto 0;
+  border-radius: 24rpx;
+  color: #59C89F;
+  overflow: hidden;
+}
+.q-waitpage-tps1{
+  font-size: 36rpx;
+  font-weight: 500;
+  margin: 40rpx 0 10rpx 40rpx;
+}
+.q-waitpage-tps2{
+  font-size: 28rpx;
+}
+.q-waitpage-tps2-margin{
+  margin-left: 40rpx;
+}
+.q-waitpage-tps3{
+  margin: 54rpx 0 0 40rpx;
+}
+.q-waitpage-imgbox1{
+  width: 380rpx;
+  height: 380rpx;
+  margin: 116rpx auto 0;
+}
+.q-waitpage-imgbox1 image, .q-waitpage-imgbox2 image{
+  width: 100% !important;
+  height: 100% !important;
+}
+.q-waitpage-imgbox2{
+  width: 100rpx;
+  height: 100rpx;
+  margin: 186rpx auto 0;
+}
+.q-waitpage-handtext{
+  width: 48rpx;
+  margin: 30rpx auto 0;
+  font-size: 24rpx;
+  color: #333333;
+}
+.phone{
+  width: 50px;
+  height: 50px;
+}
+.bottom{
+  display: flex;
+  justify-content: space-between;
+  padding: 80px 80px 0;
+}
+.backHome image {
+    width: 30px;
+    height: 30px;
+}

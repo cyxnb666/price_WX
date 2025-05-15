@@ -1,0 +1,63 @@
+<!--pricingTask.wxml-->
+<navigation-bar title="自主采价上报" back="{{true}}" path="/pages/home/home"></navigation-bar>
+<t-pull-down-refresh class="pricingTask" show-scrollbar="{{false}}" value="{{refresherTriggered}}" loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" usingCustomNavbar bind:refresh="onSearch" bind:scrolltolower="pageTurning">
+  <view class="queryBox">
+    <t-dropdown-menu>
+      <t-dropdown-item options="{{statusOptions}}" placement="right" value="{{queryForm.condition.status}}" bindchange="onChange" />
+      <t-input placeholder="输入采价点查询" value="{{queryForm.condition.stallName}}" bindblur="bindBlur" />
+    </t-dropdown-menu>
+  </view>
+  <view class="pricingTaskList">
+    <block wx:for="{{pricingTaskList}}" wx:key="index">
+      <t-swipe-cell opened="{{cellOpend}}" disabled="{{item.priceStatus !== '3' && item.priceStatus !== '4'}}">
+        <view class="pricingTaskItem" data-item="{{item}}" bindtap="toDetail">
+          <view class="pricingTaskItem-header">
+            <view class="pricingTaskItem-header-left">
+              {{item.stallName}}
+            </view>
+            <t-tag variant="dark" style="{{item.priceStatus == '4' ? 'background-color: #CCEDAA;color:#000;border:none' : ''}}" theme="{{taskStatusColor[item.priceStatus]}}">{{taskStatus[item.priceStatus] }}</t-tag>
+            <!-- <view class="{{[item.priceStatus === '4' ? 'pricingTaskItem-header-right2' : 'pricingTaskItem-header-right']}}">
+            {{taskStatus[item.priceStatus]}}
+            </view> -->
+          </view>
+          <view class="pricingTaskItem-body">
+            <view class="pricingTaskItem-body-item">
+              <view class="pricingTaskItem-body-item-title">行政区划:</view>
+              <view class="pricingTaskItem-body-item-content">{{item.areaname}}</view>
+            </view>
+            <view class="pricingTaskItem-body-item">
+              <view class="pricingTaskItem-body-item-title">采价品种:</view>
+              <view class="pricingTaskItem-body-item-content">{{item.varietyName ? item.varietyName : ''}}</view>
+            </view>
+            <view class="pricingTaskItem-body-item">
+              <view class="pricingTaskItem-body-item-title">计划采价时间:</view>
+              <view class="pricingTaskItem-body-item-content">{{item.collectDate}}</view>
+            </view>
+            <view class="pricingTaskItem-body-item" wx:if="{{item.collectTime && item.priceStatus != '3'}}">
+              <view class="pricingTaskItem-body-item-title">提交时间:</view>
+              <view class="pricingTaskItem-body-item-content">{{item.collectTime}}</view>
+            </view>
+          </view>
+        </view>
+        <t-button theme="primary" class="dle-btn" data-item="{{item}}" size="large" slot="right" bindtap="onDelete">{{ item.priceStatus == '3' ? "删 除" : "取消审核" }}</t-button>
+      </t-swipe-cell>
+    </block>
+  </view>
+  <view class="nothingMore">暂无更多</view>
+</t-pull-down-refresh>
+<t-dialog
+  visible="{{showConfirm}}"
+  title="{{autoPriceItem.priceStatus == '3' ? '删除自主上报任务?' : '取消审核自主上报任务?'}}"
+  content="{{autoPriceItem.priceStatus == '3' ? '请确认是否删除自主上报任务?' : '请确认是否取消审核自主上报任务?'}}"
+  confirm-btn="{{ confirmBtn }}"
+  cancel-btn="取消"
+  bind:confirm="closeDialog"
+  bind:cancel="closeDialog"
+/>
+<t-toast id="t-toast"/>
+
+<view class="operation">
+  <view class="operation-btn-box">
+    <t-button class="operation-btn" theme="primary" bind:tap="submit">新增自主采价</t-button>
+  </view>
+</view>

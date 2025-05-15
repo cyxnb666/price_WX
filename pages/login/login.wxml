@@ -1,0 +1,12 @@
+<!--login.wxml-->
+<view class="loginView ">
+  <view class="flex w100">
+    <t-button t-class="loginBtn" style="{{'background-color:#FFFFFF;color:rgb(26, 173, 25);font-size: 40rpx;'}}" size="large" shape="round" open-type="getPhoneNumber" bind:getphonenumber="authorizedLogin">授 权
+      登 录
+    </t-button>
+    <t-button class="loginBtn mt20"  variant="outline" style="{{'background-color:#FFFFFF;color:rgb(26, 173, 25);font-size: 40rpx;'}}" size="large" shape="round" bind:tap="submit">暂不登录
+    </t-button>
+  </view>
+  <t-dialog :visible="{{showDialog}}" title="登录失败" content="您授权的手机号无登录权限或登录错误，请重新尝试" confirm-btn="{{ {content: '确认', variant: 'base'} }}" data-key="showDialog" bind:confirm="closeDialog" />
+  <getUserProfile id="getUserProfile" />
+</view>

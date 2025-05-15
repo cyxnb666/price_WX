@@ -1,0 +1,9 @@
+<t-navbar
+        t-class-placeholder="t-navbar-placeholder"
+        t-class-content="t-navbar-content"
+        class="custom-navbar"
+        title="{{title}}"
+        delta="{{delta}}"
+        left-arrow="{{back}}"
+        t-class-title="nav-title"
+/>

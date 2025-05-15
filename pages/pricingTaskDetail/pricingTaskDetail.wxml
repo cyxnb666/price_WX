@@ -1,0 +1,68 @@
+<!--pricingTaskDetail.wxml-->
+<navigation-bar title="采价任务详情" back="{{true}}"></navigation-bar>
+<t-pull-down-refresh class="pricingTaskDetail"
+style="{{disabled ? 'height:100% !important' : 'height:calc(100% - 190px) !important'}}"
+                     show-scrollbar="{{false}}"
+                     value="{{refresherTriggered}}"
+                     loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+                     usingCustomNavbar
+                     bind:refresh="getDetails"
+>
+    <view class="pricingTaskDetail-container">
+        <t-cell title="行政区划" note="{{pricingTaskDetail.areaname}}"/>
+        <t-cell title="采价品种" note="{{pricingTaskDetail.varietyName}}"/>
+        <t-cell title="采价方式" note="{{pricingTaskDetail.collectTypeCnm}}"/>
+        <t-cell title="占比" wx:if="{{ pricingTaskDetail.collectType !== '2'}}" note="{{pricingTaskDetail.collectRate}}%"/>
+        <t-cell title="计划采价时间" note="{{pricingTaskDetail.collectBgnDate}}-{{pricingTaskDetail.collectEndDate}}"/>
+        <t-cell title="实际采价占比" wx:if="{{ pricingTaskDetail.collectType !== '2'}}"  note="{{pricingTaskDetail.actualCollectRate }}%"/>
+        <t-cell title="选择采价点采价">
+            <view slot="description">
+                <view class="table-header">
+                    <view class="table-header-title ordinal">序号</view>
+                    <view class="table-header-title stallName">采价点</view>
+                    <view class="table-header-title state">状态</view>
+                    <view class="table-header-title delete"></view>
+                </view>
+                <view class="table-body-item" wx:for="{{pricingTaskDetail.stalls}}" wx:key="index" data-stallName="{{item.stallName}}" data-collectStatus="{{item.collectStatus}}" data-collectPriceId="{{item.collectPriceId}}" data-varietyid="{{pricingTaskDetail.varietyId}}"  data-stallId="{{item.stallId}}" bindtap="toPricingDetail">
+                    <view class="table-body-item-value ordinal">{{index + 1}}</view>
+                    <view class="table-body-item-value stallName">{{item.stallName}}</view>
+                    <view class="table-body-item-value state">{{taskStatus[item.collectStatus]}}</view>
+                    <view class="delete" wx:if="{{ pricingTaskDetail.collectType !== '2' && !disabled }}">
+                        <t-button theme="danger" variant="text" icon="delete-1-filled" size="mini" data-id="{{item.taskStallId}}" bind:tap="removeStallFn"></t-button>
+                    </view>
+                </view>
+                <view class="tips" wx:if="{{!pricingTaskDetail.stalls.length}}">暂无采价点</view>
+                <view class="add"  wx:if="{{ pricingTaskDetail.collectType !== '2' && !disabled }}">
+                    <t-button theme="primary" size="extra-small" variant="outline" bind:tap="addPricingPoint">新增采价点</t-button>
+                </view>
+            </view>
+        </t-cell>
+    </view>
+</t-pull-down-refresh>
+<view class="operation" wx:if="{{!disabled}}">
+    <view class="operation-btn-box">
+        <t-button class="operation-btn" theme="primary" variant="outline" bind:tap="goBack">返 回</t-button>
+    </view>
+    <view class="operation-btn-box">
+        <t-button class="operation-btn" theme="primary" loading="{{submitLoading}}" bind:tap="submit">提交数据</t-button>
+    </view>
+</view>
+<t-toast id="t-toast" />
+<t-popup
+        visible="{{visible}}"
+        using-custom-navbar
+        close-on-overlay-click="{{true}}"
+        bind:visible-change="onVisibleChange"
+        placement="right"
+>
+    <view class="popup-container" slot="content" wx:if="{{visible}}">
+        <view class="popup-container-title">采价点选择</view>
+        <t-search class="popup-container-search" value="{{stallName}}" bind:clear="actionHandle"  bind:change="changeHandle" bind:blur="searchStall" placeholder="输入采价点查询" />
+        <scroll-view class="popup-container-scroll" scroll-y="true">
+            <t-checkbox-group value="{{selectedPricingPoint}}" bind:change="handleGroupChange" options="{{pricingPoint}}" />
+        </scroll-view>
+        <view class="popup-operation">
+            <t-button class="popup-operation-btn" theme="primary" loading="{{confirmLoading}}" bind:tap="confirmSelection">确认选择</t-button>
+        </view>
+    </view>
+</t-popup>

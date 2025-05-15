@@ -1,0 +1,30 @@
+<!-- pages/mine/index.wxml -->
+<view class="page mine page-with-bottom-bar">
+  <view class="bg-block">
+    <image src="/pages/images/home.png" class="bg" mode="aspectFill" />
+  </view>
+  
+  <view class="content">
+    <view class="user-info br-8">
+      <view class="avatar mb-8">
+        <image src="{{avatar}}" class="avatar-img" />
+      </view>
+      <text class="user-name f-16">{{userInfo.userName || ''}}</text>
+    </view>
+    
+    <view class="menu-list">
+      <t-cell
+        title="微信昵称"
+        note="{{userInfo.userName}}"
+        hover
+      />
+      <t-cell
+        title="手机号"
+        note="{{userInfo.userMobile}}"
+        hover
+      />
+    </view>
+  </view>
+
+</view>
+<custom-tabBar selected="{{1}}" />

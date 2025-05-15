@@ -1,0 +1,93 @@
+page {
+  width: 100%;
+  height: 100%;
+}
+.homeView {
+  width: 100%;
+  height: 100%;
+}
+.header {
+  width: 100%;
+  height: 100rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.header-title{
+  font-weight: bold;
+  font-size: 36rpx;
+}
+.logOut{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #0052d9;
+}
+.userName{
+  margin-right: 20rpx;
+}
+.homeImage{
+  width: 100%;
+}
+.home-content{
+  height: calc(100% - 383px);
+  overflow-y: auto;
+  padding: 40rpx 20rpx 0;
+  box-sizing: border-box;
+}
+.priceAcquisitionTask{
+  border: rgb(26, 173, 25) solid 1px;
+  margin-bottom: 40rpx;
+}
+.largeAmountSalePlan{
+  border: #10AEFF solid 1px;
+  margin-bottom: 40rpx;
+}
+.intelligentRecognition{
+  border: #2782D7 solid 1px;
+}
+.home-item{
+  display: flex;
+  align-items: center;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  justify-content: space-between;
+}
+.home-item-image{
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 60rpx;
+}
+.home-item-title{
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.priceAcquisitionTask-title{
+  color: rgb(26, 173, 25);
+}
+.largeAmountSalePlan-title{
+  color: #10AEFF;
+}
+.intelligentRecognition-title,.intelligentRecognition-tips{
+  color: #2782D7;
+}
+.priceAcquisitionTask-tips{
+  margin-left: 50rpx;
+}
+.largeAmountSalePlan-tips{
+  margin-left: 20rpx;
+}
+.flex1{
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.home-item-tips{
+  color: #E7A927;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+}

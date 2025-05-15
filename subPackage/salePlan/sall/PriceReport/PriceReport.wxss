@@ -1,0 +1,202 @@
+page {
+  height: 100%;
+  width: 100%;
+}
+.listTask {
+  height: calc(100vh - 190px) !important;
+  width: 100%;
+  background-color: #F2F2F2FF;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+.t-dropdown-item{
+  top:50px !important;
+}
+.t-dropdown-item__body,.t-dropdown-item__scroll{
+  height: 200px;
+}
+.queryBox{
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+.list-item{
+  background-color: #FFFFFF;
+  padding: 20rpx;
+  box-sizing: border-box;
+  box-shadow: 0 6rpx 12rpx rgba(0, 0, 0, 0.15);
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+.ListItem-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+.ListItem-header-left{
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.flex{
+  display:flex;
+  align-items: center;
+}
+.icon{
+  color: rgb(226, 111, 17);
+}
+.ListItem-body-item{
+  display: flex;
+}
+.ListItem-body-item-title{
+  color: #666666;
+  width: 200rpx;
+  margin-right: 40rpx;
+}
+.ListItem-body-item-content{
+  color: #666666;
+}
+.ListItem-header-right{
+  background-color: #3693FF66;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+.ListItem-header-right2{
+  background-color: #CCEDAA;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+.nothingMore{
+  color: #666666;
+  width: 100%;
+  text-align: center;
+}
+.pricingTask {
+  height: calc(100% - 91px);
+  width: 100%;
+  background-color: #F2F2F2FF;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.t-dropdown-menu__item {
+  width: 160rpx !important;
+}
+
+.t-dropdown-item__body,
+.t-dropdown-item__scroll {
+  height: 200px;
+}
+
+.queryBox {
+  margin-bottom: 20rpx;
+}
+
+.pricingTaskItem {
+  background-color: #FFFFFF;
+  padding: 20rpx;
+  box-sizing: border-box;
+  box-shadow: 0 6rpx 12rpx rgba(0, 0, 0, 0.15);
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.pricingTaskItem-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.pricingTaskItem-header-left {
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.pricingTaskItem-body-item {
+  display: flex;
+}
+
+.pricingTaskItem-body-item-title {
+  color: #666666;
+  width: 210rpx;
+  margin-right: 40rpx;
+}
+
+.pricingTaskItem-body-item-content {
+  color: #666666;
+}
+
+.pricingTaskItem-header-right {
+  background-color: #3693FF66;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+
+.pricingTaskItem-header-right2 {
+  background-color: #CCEDAA;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+
+.nothingMore {
+  color: #666666;
+  width: 100%;
+  text-align: center;
+}
+.spb{
+  justify-content: space-between;
+}
+.operation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  background: #fff;
+  box-sizing: border-box;
+  padding: 16px;
+  padding-bottom: calc(16px + constant(safe-area-inset-bottom));
+  /* 兼容 iOS < 11.2 */
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  /* 适配 iPhone X 等设备的底部 */
+  padding: 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  --td-button-primary-bg-color: #1989FA !important;
+  --td-button-primary-border-color: #1989FA !important;
+  --td-button-primary-outline-border-color: #1989FA !important;
+  --td-button-primary-outline-color: #1989FA !important;
+}
+
+.operation-btn-box {
+  width: calc(100% - 20rpx);
+}
+
+.operation-btn {
+  width: 100%;
+}
+
+.popup-operation {
+  padding: 20rpx;
+  box-sizing: border-box;
+  --td-button-primary-bg-color: #1989FA !important;
+  --td-button-primary-border-color: #1989FA !important;
+}
+
+.popup-operation-btn {
+  width: 100%;
+}
+
+.custom-navbar {
+  --td-navbar-color: #fff !important;
+  --td-navbar-bg-color: #7393FF !important;
+}

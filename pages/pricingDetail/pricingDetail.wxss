@@ -1,0 +1,126 @@
+/* pages/pricingDetail.wxss */
+page {
+    height: 100%;
+    width: 100%;
+    --td-cell-title-color: #42AEFA !important;
+    --td-cell-note-color: #333333 !important;
+}
+.table-body-item-box{
+  display: flex;
+  align-items: center;
+}
+.pricingDetail {
+    height: calc(100% - 190px) !important;
+    width: 100%;
+    background-color: #F2F2F2FF;
+    padding: 20rpx;
+    box-sizing: border-box;
+}
+
+.pricingDetail-container {
+    background-color: #ffffff;
+}
+
+.operation {
+    padding: 40rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    --td-button-primary-bg-color: #1989FA !important;
+    --td-button-primary-border-color: #1989FA !important;
+    --td-button-primary-outline-border-color: #1989FA !important;
+    --td-button-primary-outline-color: #1989FA !important;
+}
+
+.operation-btn-box {
+    width: calc(50% - 20rpx);
+}
+
+.operation-btn {
+    width: 100%;
+}
+
+.custom-navbar {
+    --td-navbar-color: #fff !important;
+    --td-navbar-bg-color: #7393FF !important;
+}
+
+.pricingType {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20rpx 0;
+}
+
+.fruitDiameter, .weight {
+    width: 40%;
+    border: 1px solid #E5E5E5;
+    text-align: center;
+    padding: 10rpx 0;
+}
+.fruitDiameter{
+    border-top-left-radius: 40rpx; /* 高度的一半 */
+    border-bottom-left-radius: 40rpx; /* 高度的一半 */
+}
+.weight{
+    border-top-right-radius: 40rpx; /* 高度的一半 */
+    border-bottom-right-radius: 40rpx; /* 高度的一半 */
+}
+.active-fruitDiameter{
+    width: 40%;
+    border: 1px solid #1989FA;
+    text-align: center;
+    padding: 10rpx 0;
+    background-color: #1989FA;
+    color: #ffffff;
+    border-top-left-radius: 40rpx; /* 高度的一半 */
+    border-bottom-left-radius: 40rpx; /* 高度的一半 */
+}
+.active-weight{
+    width: 40%;
+    border: 1px solid #1989FA;
+    text-align: center;
+    padding: 10rpx 0;
+    background-color: #1989FA;
+    color: #ffffff;
+    border-top-right-radius: 40rpx; /* 高度的一半 */
+    border-bottom-right-radius: 40rpx; /* 高度的一半 */
+}
+.table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30rpx;
+    margin-bottom: 20rpx;
+}
+.table-body{
+    padding: 0 30rpx;
+}
+.table-header-item{
+    color: #E7A927;
+}
+.table-body-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20rpx;
+    border-bottom: 1px solid #F5F5F5;
+    padding-bottom: 12rpx;
+}
+.tips{
+    color: #E26F11;
+    margin-bottom: 20rpx;
+}
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 40rpx;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #e34d59;
+}

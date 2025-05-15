@@ -1,0 +1,33 @@
+<!--subPackage/salePlan/sall/addSalePlan/addSalePlan.wxml-->
+
+<view class="addSalePlanTask-container">
+  <t-cell title="采价点" note="{{salePalnDetail.stallName}}" />
+  <t-cell title="当前位置" note="{{salePalnDetail.registAddress }}"> </t-cell>
+  <t-cell title="品种大类">
+    <view slot="description">
+      <t-check-tag wx:for="{{buttomVariet}}" wx:key="index" class="margin-16" bind:click="tagClick" data-varietyId="{{item.varietyId}}" checked="{{salePalnDetail.varietyId === item.varietyId}}" size="large" variant="dark" content="{{ item.varietyName }}" />
+    </view>
+  </t-cell>
+  <t-cell title="品种小类">
+    <view slot="description">
+      <view wx:if="{{categoryList.length}}">
+        <t-check-tag wx:for="{{categoryList}}" wx:key="index" class="margin-16" bind:click="tagcategoryClick" data-categoryId="{{item.categoryId}}" checked="{{salePalnDetail.categoryId === item.categoryId}}" size="large" variant="dark" content="{{ item.categoryName }}" />
+      </view>
+      <t-empty wx:else description="该品种大类下暂无小类" />
+    </view>
+  </t-cell>
+  <t-cell title="计划出售日期" note="{{salePalnDetail.planSaleDate }}">
+  <t-icon slot='right-icon' name="date" size="48rpx" data-name="date"/>
+   </t-cell>
+  <t-input label="计划售货量" placeholder="请输入预计出货千克数" suffix="Kg" align="right" value='{{salePalnDetail.planSaleWeight}}' type="digit" format="{{priceFormat}}" readonly='{{true}}' tips="{{priceError ? '请输入正确的售货量' : ''}}" t-class-tips="tips" />
+  <t-cell title="协助采价员联系人" note="{{salePalnDetail.linkerName || '请选择'}}" hover data-key="linkerName" />
+  <t-cell title="协助采价员联系人电话" note="{{salePalnDetail.linkerMobile}}" />
+
+  <t-cell title="订单凭据(销售订单合同)">
+    <view slot="description">
+      <t-cell wx:for="{{salePalnDetail.fileIds}}" wx:key="index" title="{{(index+1)+'. '+item}}" arrow hover data-key="fileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview">
+      </t-cell>
+    </view>
+
+  </t-cell>
+</view>

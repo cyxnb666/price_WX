@@ -1,0 +1,22 @@
+.map-container {
+  width: 100%;
+  height: calc(100vh - 100px);
+}
+#map{
+  width:100%;
+  height:calc(100vh - 200rpx)
+}
+.cu-form-group{
+  position: absolute;
+  z-index: 99;
+  bottom: 10rpx;
+  background-color: #fff;
+  width: calc(100% - 100rpx);
+  padding: 50rpx;
+}
+.text{
+  font-size: 16px;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

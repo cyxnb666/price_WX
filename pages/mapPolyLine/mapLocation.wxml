@@ -1,0 +1,18 @@
+<navigation-bar title="地图导航" back="{{true}}" color="black"></navigation-bar>
+<view class="map-container">
+  <view class="cu-form-group">
+    <view >
+      <view>出发地:</view>
+      <view class="text">{{startAddress}}</view>
+    </view>
+    <view >
+      <view>目的地:</view>
+      <view class="text">{{endAddress}}</view>
+    </view>
+    <view placeholder="目的地">
+      <view>总共:{{distance}}</view>
+      <view>预计耗时:{{cost}}</view>
+    </view>
+  </view>
+  <map id="map" longitude="{{markers[1].longitude}}" latitude="{{markers[1].latitude}}" scale="12" markers="{{markers}}" show-location="true" polyline="{{polyline}}"></map>
+</view>

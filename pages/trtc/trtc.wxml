@@ -1,0 +1,116 @@
+<!-- template 1v1 -->
+<view class="template-1v1">
+    <view wx:for="{{streamList}}" wx:key="streamID" wx:if="{{item.src && (item.hasVideo || item.hasAudio)}}"
+          class="view-container  {{isSmallWindow ? 'smallWindow' : 'player-container' }} {{item.isVisible?'':'none'}}" >
+        <live-player
+                class="player"
+                id="{{item.streamID}}"
+                data-userid="{{item.userID}}"
+                data-streamid="{{item.streamID}}"
+                data-streamtype="{{item.streamType}}"
+                src="{{item.src}}"
+                mode="{{item.mode}}"
+                autoplay="{{item.autoplay}}"
+                mute-audio="{{item.muteAudio}}"
+                mute-video="{{item.muteVideo}}"
+                orientation="{{item.orientation}}"
+                object-fit="{{item.objectFit}}"
+                background-mute="{{item.enableBackgroundMute}}"
+                min-cache="{{item.minCache}}"
+                max-cache="{{item.maxCache}}"
+                sound-mode="{{item.soundMode}}"
+                enable-recv-message="{{item.enableRecvMessage}}"
+                auto-pause-if-navigate="{{item.autoPauseIfNavigate}}"
+                auto-pause-if-open-native="{{item.autoPauseIfOpenNative}}"
+                debug="{{debug}}"
+                bindstatechange="_playerStateChange"
+                bindfullscreenchange="_playerFullscreenChange"
+                bindnetstatus="_playerNetStatus"
+                bindaudiovolumenotify="_playerAudioVolumeNotify"
+        />
+    </view>
+    <view class="view-container {{isSmallWindow ? 'pusher-container' : 'smallWindow' }}  {{pusher.isVisible?'':'none'}} {{streamList.length===0? 'fullscreen':''}}" >
+      <!-- bindtap="changeSmallWindow" -->
+        <live-pusher
+                id="pusher"
+                class="pusher"
+                url="{{pusher.url}}"
+                mode="{{pusher.mode}}"
+                autopush="{{pusher.autopush}}"
+                enable-camera="{{pusher.enableCamera}}"
+                enable-mic="{{pusher.enableMic}}"
+                muted="{{!pusher.enableMic}}"
+                enable-agc="{{pusher.enableAgc}}"
+                enable-ans="{{pusher.enableAns}}"
+                enable-ear-monitor="{{pusher.enableEarMonitor}}"
+                auto-focus="{{pusher.enableAutoFocus}}"
+                zoom="{{pusher.enableZoom}}"
+                min-bitrate="{{pusher.minBitrate}}"
+                max-bitrate="{{pusher.maxBitrate}}"
+                video-width="{{pusher.videoWidth}}"
+                video-height="{{pusher.videoHeight}}"
+                beauty="{{pusher.beautyLevel}}"
+                whiteness="{{pusher.whitenessLevel}}"
+                orientation="{{pusher.videoOrientation}}"
+                aspect="{{pusher.videoAspect}}"
+                device-position="{{pusher.frontCamera}}"
+                remote-mirror="{{pusher.enableRemoteMirror}}"
+                local-mirror="{{pusher.localMirror}}"
+                background-mute="{{pusher.enableBackgroundMute}}"
+                audio-quality="{{pusher.audioQuality}}"
+                audio-volume-type="{{pusher.audioVolumeType}}"
+                audio-reverb-type="{{pusher.audioReverbType}}"
+                waiting-image="{{pusher.waitingImage}}"
+                debug="{{debug}}"
+                bindstatechange="_pusherStateChangeHandler"
+                bindnetstatus="_pusherNetStatusHandler"
+                binderror="_pusherErrorHandler"
+                bindbgmstart="_pusherBGMStartHandler"
+                bindbgmprogress="_pusherBGMProgressHandler"
+                bindbgmcomplete="_pusherBGMCompleteHandler"
+                bindaudiovolumenotify="_pusherAudioVolumeNotify"
+        />
+        <view class="loading" wx:if="{{streamList.length === 0 && !isConnectioned}}">
+            <view class="loading-img">
+                <image src="./static/loading.png" class="rotate-img"></image>
+            </view>
+            <view class="loading-text">等待...</view>
+        </view>
+    </view>
+    <!-- <view class="adddd"></view> -->
+    <image class="btn-hangup" src="./static/hangup.png" bindtap="_hangUp"></image>
+    <view class="right-operation" wx:if="{{roleCode === 'COLLECTOR'}}">
+        <view class="switch">
+            <image class="btn-switch" src="./static/switch.png" bindtap="_switchCamera"></image>
+        </view>
+        <view class="flash">
+            <image class="btn-flash" src="./static/flash.png" bindtap="switchFlash"></image>
+        </view>
+        <view class="takingPictures" bindtap="takingPictures">
+            <image class="btn-takingPictures" src="./static/takingPictures.png"></image>
+        </view>
+        <view class="locating">
+            <image class="btn-locating" src="./static/locating.png" bindtap="getLocating"></image>
+        </view>
+        <view class="audio">
+            <image class="btn-audio" src="{{isAudio?'./static/audioCloss.png':'./static/audio.png'}}"
+                   bindtap="audioSwitch"></image>
+        </view>
+    </view>
+    <view class="watermarking" wx:if="{{roleCode === 'COLLECTOR'}}">
+        <view class="address">{{address}}</view>
+        <view class="date">{{date}}</view>
+    </view>
+    <view class="shootingType"  wx:if="{{roleCode === 'COLLECTOR'}}">
+        <view class="shootingType-title">拍摄类型</view>
+        <view class="shootingType-item {{selectedType === 'priceFileIds'?'action':''}}" data-key="priceFileIds" bindtap="shootingType">
+            <view>采价佐证凭证</view>
+            <view>{{priceFileIds.length}}</view>
+        </view>
+        <view class="shootingType-item {{selectedType === 'collectFileIds'?'action':''}}" data-key="collectFileIds" bindtap="shootingType">
+            <view>采价记录</view>
+            <view>{{collectFileIds.length}}</view>
+        </view>
+    </view>
+</view>
+<canvas canvas-id="myCanvas" style="width: 300px; height: 200px; display: none;"></canvas>

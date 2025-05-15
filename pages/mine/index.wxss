@@ -1,0 +1,49 @@
+/* pages/mine/index.wxss */
+.mine {
+  width: 100%;
+  height: 100%;
+}
+
+.bg {
+  width: 100%;
+  height: 300rpx;
+}
+
+.menu-list {
+  padding: 32rpx 0;
+}
+
+.content {
+  padding: 0 32rpx;
+}
+
+.content .btn {
+  background: #fff;
+}
+
+.user-info {
+  margin: 0 auto;
+  background: #fff;
+  padding: 60rpx 32rpx;
+  width: 640rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx 0 rgba(126, 126, 126, 0.1558);
+  border-radius: 8rpx;
+  margin-top: -180rpx;
+  position: relative;
+  z-index: 999;
+}
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.avatar-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+}

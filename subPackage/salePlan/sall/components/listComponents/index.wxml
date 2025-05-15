@@ -1,0 +1,39 @@
+<t-pull-down-refresh class="listTask" show-scrollbar="{{false}}" value="{{refresherTriggered}}" loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" usingCustomNavbar bind:refresh="onSearch" bind:scrolltolower="pageTurning">
+  <view class="queryBox" wx:if="{{ taskType != '1'}}">
+    <t-dropdown-menu>
+      <t-dropdown-item options="{{statusOptions}}" placement="right" value="{{queryForm.condition.status}}" bindchange="onChange" />
+      <t-input placeholder="输入采价点查询" value="{{queryForm.condition.stallName}}" clearable="{{true}}" bindblur="bindBlur" />
+    </t-dropdown-menu>
+  </view>
+  <view class="list">
+    <view class="list-item" wx:for="{{list}}" wx:key="index" data-item="{{item}}" bindtap="toDetail">
+      <t-swipe-cell disabled="{{taskType != '1' }}" opened="{{ cellOpend }}">
+        <view class="ListItem-header">
+          <view class="ListItem-header-left">
+            {{item.stallName}}
+          </view>
+          <t-tag variant="dark" theme="{{taskStatusColor[item.taskStatus]}}">{{taskStatus[item.taskStatus] }}</t-tag>
+        </view>
+        <view class="ListItem-body">
+          <view class="ListItem-body-item">
+            <view class="ListItem-body-item-title">行政区划:</view>
+            <view class="ListItem-body-item-content">{{item.areaName}}</view>
+          </view>
+          <view class="ListItem-body-item">
+            <view class="ListItem-body-item-title">采价品种:</view>
+            <view class="ListItem-body-item-content">{{item.categoryName}}</view>
+          </view>
+          <view class="ListItem-body-item">
+            <view class="ListItem-body-item-title">计划出售时间:</view>
+            <view class="ListItem-body-item-content">{{item.planSaleDate}}</view>
+          </view>
+        </view>
+        <view class="btn claimBtn" slot="right" data-id="{{item.planId}}" bindtap="onClaim">
+          认 领
+        </view>
+      </t-swipe-cell>
+    </view>
+
+  </view>
+  <view class="nothingMore">暂无更多</view>
+</t-pull-down-refresh>

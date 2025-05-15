@@ -1,0 +1,77 @@
+.listTask {
+  height: calc(100vh - 100px) !important;
+  width: 100%;
+  background-color: #F2F2F2FF;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+.t-dropdown-item{
+  top:50px !important;
+}
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 40rpx;
+  color: white;
+}
+
+.claimBtn {
+  background-color: #e34d59;
+}
+.t-dropdown-item__body,.t-dropdown-item__scroll{
+  height: 200px;
+}
+.queryBox{
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+.list-item{
+  background-color: #FFFFFF;
+  padding: 20rpx;
+  box-sizing: border-box;
+  box-shadow: 0 6rpx 12rpx rgba(0, 0, 0, 0.15);
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+.ListItem-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+.ListItem-header-left{
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.ListItem-body-item{
+  display: flex;
+}
+.ListItem-body-item-title{
+  color: #666666;
+  width: 200rpx;
+  margin-right: 40rpx;
+}
+.ListItem-body-item-content{
+  color: #666666;
+}
+.ListItem-header-right{
+  background-color: #3693FF66;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+.ListItem-header-right2{
+  background-color: #CCEDAA;
+  border-radius: 8rpx;
+  color: #000000;
+  font-weight: bold;
+  padding: 0 12rpx;
+}
+.nothingMore{
+  color: #666666;
+  width: 100%;
+  text-align: center;
+}

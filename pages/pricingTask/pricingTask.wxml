@@ -1,0 +1,43 @@
+<!--pricingTask.wxml-->
+<navigation-bar title="采价任务" back="{{true}}" path="/pages/home/home"></navigation-bar>
+<t-pull-down-refresh class="pricingTask"
+                     show-scrollbar="{{false}}"
+                     value="{{refresherTriggered}}"
+                     loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}"
+                     usingCustomNavbar
+                     bind:refresh="onSearch"
+                     bind:scrolltolower="pageTurning"
+>
+    <view class="queryBox">
+        <t-dropdown-menu>
+            <t-dropdown-item options="{{statusOptions}}" placement="right" value="{{queryForm.condition.status}}"
+                             bindchange="onChange"/>
+            <t-input placeholder="输入采价点查询" clearable="{{true}}"  value="{{queryForm.condition.stallName}}" bindblur="bindBlur" bind:clear='clearIpt' />
+        </t-dropdown-menu>
+    </view>
+    <view class="pricingTaskList">
+        <view class="pricingTaskItem" wx:for="{{pricingTaskList}}" data-taskStatus="{{item.taskStatus}}" wx:key="index" data-id="{{item.taskId}}" bindtap="toDetail">
+            <view class="pricingTaskItem-header">
+                <view class="pricingTaskItem-header-left">
+                    {{item.collectTypeCnm}}
+                </view>
+                <t-tag variant="dark" style="{{item.taskStatus == '4' ? 'background-color: #CCEDAA;color:#000;border:none' : ''}}" theme="{{taskStatusColor[item.taskStatus]}}">{{taskStatus[item.taskStatus]}}</t-tag>
+            </view>
+            <view class="pricingTaskItem-body">
+                <view class="pricingTaskItem-body-item">
+                    <view class="pricingTaskItem-body-item-title">行政区划:</view>
+                    <view class="pricingTaskItem-body-item-content">{{item.areaname}}</view>
+                </view>
+                <view class="pricingTaskItem-body-item">
+                    <view class="pricingTaskItem-body-item-title">采价品种:</view>
+                    <view class="pricingTaskItem-body-item-content">{{item.varietyName}}</view>
+                </view>
+                <view class="pricingTaskItem-body-item">
+                    <view class="pricingTaskItem-body-item-title">计划采价时间:</view>
+                    <view class="pricingTaskItem-body-item-content">{{item.collectBgnDate}}-{{item.collectEndDate}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="nothingMore">暂无更多</view>
+</t-pull-down-refresh>

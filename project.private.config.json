@@ -1,0 +1,45 @@
+{
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "projectname": "price_weixin",
+  "setting": {
+    "compileHotReLoad": true,
+    "skylineRenderEnable": false,
+    "urlCheck": false,
+    "bigPackageSizeSupport": true
+  },
+  "libVersion": "trial",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "videowait",
+          "pathName": "pages/videowait/videowait",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/trtc/trtc",
+          "pathName": "pages/trtc/trtc",
+          "query": "data=%7B%22receiveUserId%22%3A%22ooa-l7cy_IwcoyjdfDBVwqhxQMZ8%22%2C%22sdkAppId%22%3A1600080236%2C%22bizId%22%3A%22145537%22%2C%22userSig%22%3A%22eJw1jskOgjAYhN*lZyVtoSAkHiBwcEkUWWK4YVrNDwIFUVziu4ugx5n5ZjIvFK4DRdwlNAJZhDFGMcaTwb2JBlmIKhiN*sLzVErgPaf30AxTVR8T4KJs4QhDoarS6dk4LBs9dpw6FKtMe*wwdjY06v5LcOrBvRvZpgttRyTj*aLxWADJtpBJrPkl9bKrUQZP26wr5s9-xRaK701D0whWVcLeHwV1OGU_%22%2C%22userId%22%3A%22ooa-l7bJr6VBBqTeKj4yR00BO2Uw%22%2C%22roomId%22%3A%22100000065%22%7D",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/home/home",
+          "pathName": "pages/home/home",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/pricingTask/pricingTask",
+          "pathName": "pages/pricingTask/pricingTask",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+page {
+  width: 100%;
+  height: 100%;
+}
+.flex{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.mt20{
+  margin-top: 20px;
+}
+.w100{
+  width: 100%;
+}
+.loginView {
+  width: 100%;
+  height: 100%;
+  background-image: url("https://img02.mockplus.cn/rp/image/2025-03-17/9de87d60-02de-11f0-a4e4-a18918451b6f.png");
+  background-size: 100% 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.loginBtn{
+  width: calc(100% - 80rpx);
+  position: absolute;
+  top: 78vh;
+}

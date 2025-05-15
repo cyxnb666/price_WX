@@ -1,0 +1,10 @@
+<!--pricingTask.wxml-->
+<navigation-bar title="出售价格报送" back="{{true}}" delta="{{delta}}" color="#FFF" background="linear-gradient(77.8309deg, rgb(126, 199, 250) -2.31573e-15%, rgb(115, 147, 255) 98.7137%)"></navigation-bar>
+<tabs tabs="{{tabsList}}" bindtabsItemChange="getTabsItemChange">
+<block  wx:if="{{tabsList[0].isActive}}">
+  <sale-plan tallInfo="{{tallInfo}}" salePlanDetail="{{salePlanDetail}}" wx:if="{{tabValue == '0'}}"></sale-plan>
+</block>
+<block wx:else="{{tabsList[1].isActive}}">
+  <price-report  tallInfo="{{tallInfo}}" salePlanDetail="{{salePlanDetail}}" />
+</block>
+</tabs>

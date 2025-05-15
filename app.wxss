@@ -1,0 +1,56 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+
+/*每个页面公共css */
+/*每个页面公共css */
+.page {
+  background: #f3f3f3;
+  min-height: 100vh;
+  --td-brand-color: #1989FA !important;
+}
+.r-title {
+  color: rgba(0, 0, 0, 0.9);
+  font-family: "Microsoft YaHei";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+}
+.r-describle {
+  color: rgba(0, 0, 0, 0.9);
+  font-family: "Microsoft YaHei";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.t-class-description{
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.flex-align {
+  display: flex;
+  align-items: center;
+}
+.tab-bar{
+  font-size: 16px;
+}
+.font14{
+  font-size: 14px;
+}
+.textOverflow80{
+  width: 80px;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+.margin-16{
+  margin: 16rpx;
+}

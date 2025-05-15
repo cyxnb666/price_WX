@@ -1,0 +1,18 @@
+<!--miniprogram/custom-tab-bar/index.wxml-->
+<view class="tab-bar">
+  <view class="tab-bar-border"></view>
+  <view wx:for="{{list}}" wx:key="index" class="tab-bar-item" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="switchTab">
+    <image src="{{selected === index ? item.selectedIconPath : item.iconPath}}"></image>
+    <view style="color: {{selected === index ? selectedColor : color}}">{{item.text}}</view>
+  </view>
+  <t-dialog
+  visible="{{showConfirm}}"
+  title="登录提示"
+  content="该功能需登录后使用"
+  confirm-btn="{{ confirmBtn }}"
+  cancel-btn="暂不登录"
+  button-layout="vertical"
+  bind:confirm="confirmDelete"
+  bind:cancel="closeDialog"
+/>
+</view>

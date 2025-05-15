@@ -1,0 +1,13 @@
+<view class="backHome" style="width: {{itemWidth}}px; height: {{itemHeight}}px; left: {{left}}px; top: {{top}}px;" catch:tap="goCreatePage" bind:touchstart="handleTouchStart" catch:touchmove="handleTouchMove" bind:touchend="handleTouchEnd">
+  <view bind:tap="textMessages">
+    <image src="../../pages/images/textMessages.png" mode="widthFix"></image>
+  </view>
+  <t-divider />
+  <view bindtap="video">
+    <image src="../../pages/images/video.png" mode="widthFix"></image>
+  </view>
+  <t-divider />
+  <view bindtap="makePhoneCall">
+    <image src="../../pages/images/phoneStatic.png" mode="widthFix"></image>
+  </view>
+</view>

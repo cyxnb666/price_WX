@@ -1,0 +1,9 @@
+<!--components/addLinker/addLinker.wxml-->
+<t-dialog visible="{{dialogValue}}" title="添加联系人" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
+  <scroll-view slot="content" type="list" scroll-y class="long-content">
+  <t-input label='协助采价员联系人' align="center"   clearable  placeholder="输入联系人" value="{{form.linkerName}}"  placeholder-class="placeholder" bindchange="onLikerIpt" />
+  <t-input label="协助采价员联系人电话" align="center" placeholder="输入联系人电话" value="{{form.linkerMobile}}" type="number" tips="{{phoneError ? '手机号输入不正确' : ''}}" bindchange="onPhoneInput">
+  </t-input>
+  </scroll-view>
+  <t-toast id="t-toast" />
+</t-dialog>

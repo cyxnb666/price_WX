@@ -1,0 +1,75 @@
+<!--subPackage/salePlan/sall/addSalePlan/addSalePlan.wxml-->
+<navigation-bar title="出售计划登记" back="{{true}}"></navigation-bar>
+<t-pull-down-refresh class="addSalePlanTask" show-scrollbar="{{false}}" value="{{refresherTriggered}}" loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" usingCustomNavbar bind:refresh="onSearch" bind:scrolltolower="pageTurning">
+  <view class="addSalePlanTask-container">
+    <t-cell title="采价点" description="{{salePalnDetail.stallName}}" arrow />
+    <t-cell title="当前位置" description="{{salePalnDetail.registAddress || '点击获取'}}">
+      <t-icon name="location" slot="right-icon" size="48rpx" data-type='location' bindtap="onIconTap" />
+    </t-cell>
+    <t-cell title="品种大类">
+      <view slot="description">
+        <t-check-tag wx:for="{{buttomVariet}}" wx:key="index" class="margin-16" bind:click="tagClick" data-varietyId="{{item.varietyId}}" checked="{{salePalnDetail.varietyId === item.varietyId}}" size="large" variant="dark" content="{{ item.varietyName }}" />
+      </view>
+    </t-cell>
+    <t-cell title="品种小类">
+      <view slot="description">
+        <view wx:if="{{categoryList.length}}">
+          <t-check-tag wx:for="{{categoryList}}" wx:key="index" class="margin-16" bind:click="tagcategoryClick" data-categoryId="{{item.categoryId}}" checked="{{salePalnDetail.categoryId === item.categoryId}}" size="large" variant="dark" content="{{ item.categoryName }}" />
+        </view>
+        <t-empty wx:else description="该品种大类下暂无小类" />
+      </view>
+    </t-cell>
+    <date-picker title="计划出售日期" start="{{today}}" date="{{salePalnDetail.planSaleDate}}" bind:datechange="onDateChange" />
+    <t-input label="计划售货量"  maxlength="{{8}}" placeholder="请输入预计出货千克数" suffix="Kg" align="right" value='{{salePalnDetail.planSaleWeight}}' type="digit" format="{{priceFormat}}" bindchange="onPriceInput" tips="{{priceError ? '请输入正确的售货量' : ''}}" t-class-tips="tips" />
+    <t-cell title="协助采价员联系人" note="{{salePalnDetail.linkerName || '请选择'}}"  hover data-key="linkerName" bind:click="getLinkerName" >
+      <t-icon slot='right-icon' name="add-rectangle" size="48rpx" data-name="add-rectangle" catch:tap="onAddLinker" wx:if="{{userInfo.roleCode == 'STALL_LINKER'}}" />
+    </t-cell>
+    <t-cell title="协助采价员联系人电话" note="{{salePalnDetail.linkerMobile}}" />
+
+    <t-cell title="订单凭据(销售订单合同)">
+      <view slot="description">
+        <t-grid class="block" column="{{3}}">
+          <t-grid-item t-class-image="image" text="凭证拍照" icon="camera" data-type="camera" data-key="fileIds" bindtap="chooseMedia" />
+          <t-grid-item t-class-image="image" text="手机上传凭证" icon="folder-move" data-type="album" data-key="fileIds" bindtap="chooseMedia" />
+          <t-grid-item t-class-image="image" text="微信聊天文件" icon="cloud-upload" data-key="fileIds" bindtap="chooseMessageFile" />
+        </t-grid>
+      </view>
+    </t-cell>
+    <t-swipe-cell wx:for="{{salePalnDetail.fileIds}}" wx:key="index">
+            <t-cell title="{{(index+1)+'. '+item}}" arrow hover data-key="fileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview"/>
+            <view slot="right" class="btn delete-btn" data-key="fileIds" data-index="{{index}}" data-id="{{item}}"
+                  bind:tap="fileDelete">删除
+            </view>
+        </t-swipe-cell>
+
+    <!-- <t-cell wx:for="{{salePalnDetail.fileIds}}" wx:key="index" title="{{(index+1)+'. '+item}}" arrow hover data-key="fileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview">
+      <t-icon slot="note" class=" delete-btn" data-key="fileIds" data-index="{{index}}" data-id="{{item}}" name="delete" size="48rpx" data-name="{{item}}" catch:click="fileDelete" />
+    </t-cell> -->
+
+  </view>
+  <t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" :title="{{pickerTitle}}" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindconfirm="onPickerConfirm" bindcancel="onPickerCancel">
+    <t-picker-item options="{{pickerOptions}}"></t-picker-item>
+  </t-picker>
+
+</t-pull-down-refresh>
+<add-linker bind:addLinker='addLinker' dialogValue="{{dialogValue}}" bind:closeDialog="closeAddDialog" stallId="{{salePalnDetail.stallId}}" ></add-linker>
+<view class="operation">
+    <view class="operation-btn-box">
+        <t-button class="operation-btn" theme="primary" loading="{{stagingLoading}}" bind:tap="staging">暂存出售计划</t-button>
+    </view>
+    <view class="operation-btn-box">
+        <t-button class="operation-btn" theme="primary" loading="{{submitLoading}}" bind:tap="submit">提交出售计划
+        </t-button>
+    </view>
+</view>
+<t-dialog
+  visible="{{showConfirm}}"
+  title="删除"
+  content="请确认是否删除改文件！"
+  confirm-btn="{{ confirmBtn }}"
+  cancel-btn="取消"
+  bind:confirm="confirmDelete"
+  bind:cancel="closeDialog"
+/>
+
+<t-toast id="t-toast" />

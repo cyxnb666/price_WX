@@ -1,0 +1,68 @@
+.scrollarea{
+    width: 100vw;
+    height: 500rpx;
+}
+.title{
+    /*padding: 20rpx 0;*/
+    /*width: 100%;*/
+    width: calc(100% - 164px);
+    text-align: center;
+}
+.userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #aaa;
+    width: 100%;
+}
+.avatar-wrapper {
+    padding: 0;
+    width: 128rpx !important;
+    border-radius: 16rpx;
+    margin-top: 40rpx;
+    margin-bottom: 40rpx;
+}
+.avatar {
+    display: block;
+    width: 128rpx;
+    height: 128rpx;
+}
+.nickname-wrapper {
+    display: flex;
+    width: 100%;
+    padding: 32rpx;
+    box-sizing: border-box;
+    border-top: 1rpx solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1rpx solid rgba(0, 0, 0, 0.1);
+    color: black;
+}
+.nickname-input {
+    flex: 1;
+    text-align: right;
+}
+.header {
+    display: flex;
+    align-items: center;
+    height: 116rpx;
+}
+
+.title {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 36rpx;
+    color: var(--td-text-color-primary);
+}
+
+.btn {
+    font-size: 32rpx;
+    padding: 32rpx;
+}
+
+.btn--cancel {
+    color: var(--td-text-color-secondary);
+}
+
+.btn--confirm {
+    color: #07c160;
+}

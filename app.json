@@ -1,0 +1,98 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/login/login",
+    "pages/personalCenter/personalCenter",
+    "pages/pricingTask/pricingTask",
+    "pages/pricingTaskDetail/pricingTaskDetail",
+    "pages/logs/logs",
+    "pages/mine/index",
+    "pages/pricingDetail/pricingDetail",
+    "pages/trtc/trtc",
+    "pages/mapPolyLine/mapLocation",
+    "pages/videowait/videowait",
+    "pages/collVideoWait/videoWait"
+  ],
+  "subPackages": [
+    {
+      "root": "subPackage",
+      "name": "subPackage",
+      "pages": [
+        "salePlan/minPrice/list/list",
+        "salePlan/minPrice/sallpriceDetail/sallpriceDetail",
+        "salePlan/sall/list/list",
+        "salePlan/sall/addSalePlan/addSalePlan",
+        "salePlan/sall/priceSend/priceSend",
+        "salePlan/sall/PriceReport/PriceReport",
+        "salePlan/sall/autominprice/autominprice",
+        "autopriceReport/autopriceReport",
+        "auroPriceDetail/auroPriceDetail"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "renderer": "webview",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-dropdown-menu": "tdesign-miniprogram/dropdown-menu/dropdown-menu",
+    "t-dropdown-item": "tdesign-miniprogram/dropdown-item/dropdown-item",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-pull-down-refresh": "tdesign-miniprogram/pull-down-refresh/pull-down-refresh",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-drawer": "tdesign-miniprogram/drawer/drawer",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group",
+    "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker",
+    "t-navbar": "tdesign-miniprogram/navbar/navbar",
+    "t-radio": "tdesign-miniprogram/radio/radio",
+    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
+    "t-grid": "tdesign-miniprogram/grid/grid",
+    "t-grid-item": "tdesign-miniprogram/grid-item/grid-item",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-swipe-cell": "tdesign-miniprogram/swipe-cell/swipe-cell",
+    "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
+    "t-row": "tdesign-miniprogram/row/row",
+    "t-col": "tdesign-miniprogram/col/col",
+    "t-divider": "tdesign-miniprogram/divider/divider",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-overlay": "tdesign-miniprogram/overlay/overlay"
+  },
+  "tabBar": {
+    "color": "#CCCCCC",
+    "custom": true,
+    "selectedColor": "#357BEC",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "个人中心"
+      }
+    ]
+  },
+  "requiredPrivateInfos": [
+    "chooseLocation",
+    "getLocation"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  }
+}

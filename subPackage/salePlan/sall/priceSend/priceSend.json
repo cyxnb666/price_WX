@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "sale-plan":"/subPackage/salePlan/components/salePlanDtail/salePlan",
+    "price-report":"/components/priceReported/priceReported",
+    "tabs":"/components/tabs/tabs"
+  }
+}

@@ -1,0 +1,29 @@
+<!--pricingTask.wxml-->
+<navigation-bar title="出售计划登记" back="{{true}}"  path="/pages/home/home"></navigation-bar>
+<t-pull-down-refresh class="listTask" show-scrollbar="{{false}}" value="{{refresherTriggered}}" loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" usingCustomNavbar bind:refresh="onSearch" bind:scrolltolower="pageTurning">
+  <view class="list">
+    <view class="list-item"  wx:for="{{list}}" wx:key="index" data-item="{{item}}" bindtap="toDetail">
+        <view class="ListItem-header">
+          <view class="ListItem-header-left flex">
+            <t-icon name="lemon" class="margin-16 icon" size="48rpx" data-name="lemon" />
+            {{item.varietyName}}-{{item.categoryName}}
+          </view>
+          <view>{{item.planSaleWeight || ''}}{{item.planSaleWeight ? "吨" : ''}}</view>
+        </view>
+        <view class="ListItem-body flex">
+          <view class="ListItem-body-item flex">
+            <t-icon name="calendar" class="margin-16 icon" size="48rpx" data-name="calendar" /> {{item.planSaleDate}}
+          </view>
+          <t-tag variant="dark" style="{{item.taskStatus == '4' ? 'background-color: #CCEDAA;color:#000;border:none' : ''}}" theme="{{taskStatusColor[item.taskStatus]}}">{{taskStatus[item.taskStatus]}}</t-tag>
+        </view>
+    </view>
+
+  </view>
+  <view class="nothingMore">暂无更多</view>
+  
+</t-pull-down-refresh>
+<view class="operation">
+  <view class="operation-btn-box">
+    <t-button class="operation-btn" theme="primary" loading="{{submitLoading}}" bind:tap="submit">新增出售计划</t-button>
+  </view>
+</view>

@@ -1,0 +1,28 @@
+<view class="date-picker">
+    <t-cell
+            title="{{title}}"
+            hover
+            note="{{dateText || '请选择'}}"
+            right-icon="calendar-1"
+            bindtap="showPicker"
+            t-class="panel-item"
+    />
+
+    <t-date-time-picker
+            auto-close
+            title="选择日期"
+            visible="{{visible}}"
+            mode="date"
+            default-value="{{date}}"
+            value="{{date}}"
+            format="YYYY-MM-DD"
+            start="{{start}}"
+            end="{{end}}"
+            filter="{{filter}}"
+            popup-props="{{popupProps}}"
+            bindchange="onConfirm"
+            bindpick="onColumnChange"
+            bindcancel="hidePicker"
+            bindclose="handleClose"
+    />
+</view>

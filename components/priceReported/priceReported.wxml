@@ -1,0 +1,102 @@
+<wxs module="filter" src="./priceReported.wxs"></wxs>
+<t-pull-down-refresh class="pricingDetail" show-scrollbar="{{false}}" value="{{refresherTriggered}}" loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" usingCustomNavbar 
+style="{{disabled ? 'height:100% !important' : 'height:calc(100vh - 230px) !important'}}"
+bind:refresh="bindRefresh">
+  <view class="pricingDetail-container">
+    <t-cell title="采价点" description="{{pricingDetail.stallName}}" />
+    <t-cell title="当前位置" description="{{pricingDetail.collectAddress || '点击获取'}}" right-icon="location" hover bind:click="getLocation" />
+    <date-picker title="价格日期" start="{{today}}" date="{{pricingDetail.collectDate}}" bind:datechange="onDateChange" wx:if="{{ !disabled }}" />
+    <t-cell title="价格日期" wx:else="{{disabled}}" note="{{pricingDetail.collectDate}}" />
+    <t-cell title="品种大类">
+      <view slot="description">
+        <t-check-tag wx:for="{{varieties}}" disabled="{{true}}" wx:key="index" class="margin-16" bind:click="tagClick" data-varietyId="{{item.varietyId}}" data-key="varietyId" data-varietyName="{{item.varietyName}}" checked="{{pricingDetail.varietyId === item.varietyId}}" size="large" variant="dark" content="{{ item.varietyName }}" />
+      </view>
+    </t-cell>
+    <t-cell title="品种小类">
+      <view slot="description">
+        <view wx:if="{{categories.length}}">
+          <t-check-tag wx:for="{{categories}}"  disabled="{{true}}"  data-categoryName="{{item.categoryName}}"  data-key="varietyId" wx:key="index" class="margin-16" bind:click="tagcategoryClick" data-categoryId="{{item.categoryId}}" checked="{{pricingDetail.categoryId === item.categoryId}}" size="large" variant="dark" content="{{ item.categoryName }}" />
+        </view>
+        <t-empty wx:else description="该品种大类下暂无小类" />
+      </view>
+    </t-cell>
+    <t-cell title="协助采价员联系人" wx:if="{{!(userInfo.roleCode === 'STALL_LINKER')}}" note="{{pricingDetail.linkerName || '请选择'}}" arrow hover data-key="linkerName" bind:click="getLinkerName" />
+    <t-cell title="协助采价员联系人电话" wx:if="{{!(userInfo.roleCode === 'STALL_LINKER')}}" note="{{pricingDetail.linkerMobile}}" />
+    <view class="pricingType">
+      <view class="{{[pricingType === 'diameterSpecsVos' ? 'active-fruitDiameter' : 'fruitDiameter']}}" data-type="diameterSpecsVos" bindtap="pricingTypeFn">按果径
+      </view>
+      <view class="{{[pricingType === 'weightSpecsVos' ? 'active-weight' : 'weight']}}" data-type="weightSpecsVos" bindtap="pricingTypeFn">按重量
+      </view>
+    </view>
+    <view class="table-header">
+      <view class="table-header-item">渠道</view>
+      <view class="table-header-item">规格</view>
+      <view class="table-header-item">价格</view>
+      <view class="table-header-item">
+        <t-button theme="primary" variant="text" icon="add" size="mini"  wx:if="{{!disabled}}" bind:tap="addSpecs"></t-button>
+      </view>
+    </view>
+    <view class="table-body">
+      <view class="table-body-item" wx:for="{{pricingDetail.specss}}" wx:key="index">
+        <view class="table-body-item-box" data-id="{{item.saleChannelCode}}" data-key="saleChannelCode" data-index="{{index}}" bindtap="getChannel"><text class="font14">{{filter.pickerFilter(item.saleChannelCode, 'dictCode', 'dictValue', channel)}}</text> <t-icon name="caret-down-small" size="48rpx"  />
+        </view>
+        <view class="table-body-item-box" data-id="{{item.specsId}}" data-key="specsId" data-index="{{index}}" bindtap="getSpecs"><text class="font14 textOverflow80">{{filter.specsFilter(item.specsId, specssList[pricingType])}}</text> <t-icon name="caret-down-small" size="48rpx"  />
+        </view>
+        <view class="table-body-item-box" data-unit="{{varietyUnit[item.varietyUnit] || '元/斤'}}" data-value="{{item.unitPrice}}" data-index="{{index}}" bindtap="showDialog"><text class="font14 textOverflow80">{{item.unitPrice ? item.unitPrice + (varietyUnit[item.varietyUnit] || '元/斤') : '点击填写'}}</text>
+        </view>
+        <view class="table-body-item-box">
+          <t-button theme="danger" wx:if="{{!disabled}}" variant="text" icon="delete-1-filled" size="mini" data-index="{{index}}" bind:tap="removeSpecs"></t-button>
+        </view>
+      </view>
+    </view>
+    <t-cell title="价格佐证凭证">
+      <view slot="description">
+        <view class="tips">
+          上传的凭据需要能够反映下单（销售订单合同、微信聊天截图）、发货（发货单等）、真实回款凭据（银行收款回执单、微信账单、美团商户平台交易记录）、发票等，需要能够反映出单价真实性。
+        </view>
+        <t-grid class="block" column="{{3}}"  wx:if="{{!disabled}}">
+          <t-grid-item t-class-image="image" text="凭证拍照" icon="camera" data-type="camera" data-key="priceFileIds" bindtap="chooseMedia" />
+          <t-grid-item t-class-image="image" text="手机上传凭证" icon="folder-move" data-type="album" data-key="priceFileIds" bindtap="chooseMedia" />
+          <t-grid-item t-class-image="image" text="微信聊天文件" icon="cloud-upload" data-key="priceFileIds" bindtap="chooseMessageFile" />
+        </t-grid>
+      </view>
+    </t-cell>
+    <t-swipe-cell wx:for="{{pricingDetail.priceFileIds}}" wx:key="index">
+      <t-cell title="{{(index+1)+'. '+item}}" arrow hover data-key="priceFileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview" />
+      <view slot="right" class="btn delete-btn" data-key="priceFileIds" data-index="{{index}}" data-id="{{item}}"  wx:if="{{!disabled}}" bind:tap="fileDelete">删除
+      </view>
+    </t-swipe-cell>
+    <t-cell title="采价记录">
+      <view slot="description">
+        <view class="tips">
+          为了保障您的权益和公平公正，需要您上传一些销售凭据以作证您上报的价格，您上传的数据我们将严格保密，不会泄露和另作他用，若因数据泄露造成的问题，我们将承担相应的损失和法律责任。
+        </view>
+        <t-grid class="block" column="{{2}}"  wx:if="{{!disabled}}">
+          <t-grid-item t-class-image="image" text="凭证拍照" icon="camera" data-type="camera" data-key="collectFileIds" bindtap="chooseMedia" />
+          <t-grid-item t-class-image="image" text="手机上传凭证" icon="folder-move" data-type="album" data-key="collectFileIds" bindtap="chooseMedia" />
+        </t-grid>
+      </view>
+    </t-cell>
+    <t-swipe-cell wx:for="{{pricingDetail.collectFileIds}}" wx:key="index">
+      <t-cell title="{{(index+1)+'. '+item}}" arrow hover data-key="collectFileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview" />
+      <view slot="right" class="btn delete-btn" data-key="collectFileIds" data-index="{{index}}" data-id="{{item}}"  wx:if="{{!disabled}}" bind:tap="fileDelete">删除
+      </view>
+    </t-swipe-cell>
+  </view>
+  <t-dialog visible="{{showWithInput}}" title="请输入价格" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
+    <t-input suffix="{{unit}}" class="dialog-input" format="{{priceFormat}}" clearable slot="content" type="digit" placeholder="请输入价格"  maxlength="{{8}}" placeholder-class="placeholder"  value="{{unitPrice || ''}}" bind:blur='onblurIpt' bind:change="onInput" tips="{{priceError ? '请输入正确的价格' : ''}}" t-class-tips="tips"  bind:clear="onInputClear" />
+  </t-dialog>
+  <t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" :title="{{pickerTitle}}" cancelBtn="取消" confirmBtn="确认" usingCustomNavbar bindconfirm="onPickerConfirm" bindcancel="onPickerCancel">
+    <t-picker-item options="{{pickerOptions}}"></t-picker-item>
+  </t-picker>
+</t-pull-down-refresh>
+<view class="operation" wx:if="{{!disabled}}">
+  <view class="operation-btn-box">
+    <t-button class="operation-btn" theme="primary" loading="{{stagingLoading}}" bind:tap="staging">暂存数据</t-button>
+  </view>
+  <view class="operation-btn-box">
+    <t-button class="operation-btn" theme="primary" loading="{{submitLoading}}" bind:tap="submit">提交数据
+    </t-button>
+  </view>
+</view>
+<t-toast id="t-toast" />

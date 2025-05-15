@@ -1,0 +1,47 @@
+/* subPackage/salePlan/sall/addSalePlan/addSalePlan.wxss */
+.addSalePlanTask{
+    height: calc(100% - 190px) !important;
+    width: 100%;
+    background-color: #F2F2F2FF;
+    padding: 20rpx;
+    box-sizing: border-box;
+}
+page {
+  height: 100%;
+  width: 100%;
+  --td-cell-title-color: #42AEFA !important;
+  --td-cell-note-color: #333333 !important;
+  --td-input-label-text-color: #42AEFA !important;
+}
+.addSalePlanTask-container {
+  background-color: #ffffff;
+}
+
+.delete-btn {
+  background-color: #e34d59;
+}
+.operation {
+  padding: 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  --td-button-primary-bg-color: #1989FA !important;
+  --td-button-primary-border-color: #1989FA !important;
+  --td-button-primary-outline-border-color: #1989FA !important;
+  --td-button-primary-outline-color: #1989FA !important;
+}
+
+.operation-btn-box {
+  width: calc(50% - 20rpx);
+}
+.btn{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 40rpx;
+  color: white;
+}
+.operation-btn {
+  width: 100%;
+}
