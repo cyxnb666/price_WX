@@ -4,6 +4,7 @@ import {
   getLargeCollectPrice,
   queryTypeDicts,
   regeo,
+  filepreview,
   reportLargePrice,
   selectButtomVarieties,
   selectStallFruiveggies,
@@ -46,9 +47,9 @@ Component({
     pickerVisible: false,
     pickerValue: null,
     collectPriceId: null,
-    disabled:false,
+    disabled: false,
     busiId: null,
-    delta:null,
+    delta: null,
     busiType: null,
     stallId: null,
     taskId: null,
@@ -92,11 +93,11 @@ Component({
       "varietyId": 0,
 
     },
-    varietyUnit:{
-      "UG":"元/斤",
-      "UKG":"元/公斤",
+    varietyUnit: {
+      "UG": "元/斤",
+      "UKG": "元/公斤",
     },
-    unit:"",
+    unit: "",
     pickerOptions: [],
     varieties: [],
     categories: [],
@@ -104,17 +105,17 @@ Component({
     specssList: [],
     showWithInput: false,
     priceError: false,
-    userInfo:{}
+    userInfo: {}
   },
   ready() {
     console.log(this.data.tallInfo, 'this.data.tallInfo')
-    console.log(['4','5'].includes(this.data.tallInfo.taskStatus))
+    console.log(['4', '5'].includes(this.data.tallInfo.taskStatus))
     this.setData({
-      delta:this.data.tallInfo.delta,
+      delta: this.data.tallInfo.delta,
       stallId: this.data.tallInfo.stallId,
       collectPriceId: this.data.tallInfo.collectPriceId,
-      disabled:['4','5'].includes(this.data.tallInfo.taskStatus),
-      userInfo:wx.getStorageSync('userInfo'),
+      disabled: ['4', '5'].includes(this.data.tallInfo.taskStatus),
+      userInfo: wx.getStorageSync('userInfo'),
       // taskId: options.taskId,
       // busiType: options.busiType,
       // 'pricingDetail.stallName': this.data.tallInfo.stallName,
@@ -130,7 +131,7 @@ Component({
         this.data.pricingDetail.varietyId && this.setPickerData(this.data.pricingDetail.varietyId)
         this.setTodayDate();
       } else {
-        this.data.pricingDetail.varietyId && this.setPickerData(this.data.pricingDetail.varietyId,true)
+        this.data.pricingDetail.varietyId && this.setPickerData(this.data.pricingDetail.varietyId, true)
         this.setTodayDate();
         buildCollectPriceId({}).then((res) => {
           this.setData({
@@ -165,7 +166,7 @@ Component({
         "condition": {
           "primaryKey": this.data.stallId || stallId
         }
-    }
+      }
       selectStallFruiveggies(params).then((res) => {
         this.setData({
           varieties: res,
@@ -184,16 +185,16 @@ Component({
         }
       }
       let obj = {
-        "WEIGHT":'weightSpecsVos',
-        "DIAMETER":'diameterSpecsVos',
+        "WEIGHT": 'weightSpecsVos',
+        "DIAMETER": 'diameterSpecsVos',
       }
       getLargeCollectPrice(params).then((res) => {
         this.setData({
           pricingDetail: res,
-          "pricingDetail.priceFileIds":res.priceFiles.map(v=>v.fileId),
-          "pricingDetail.collectFileIds":res.collectFiles.map(v=>v.fileId),
-          "pricingDetail.specss":res.specsVoList,
-          pricingType:res.specsVoList.length ?obj[res.specsVoList[0].specsType]  : 'diameterSpecsVos'
+          "pricingDetail.priceFileIds": res.priceFiles.map(v => v.fileId),
+          "pricingDetail.collectFileIds": res.collectFiles.map(v => v.fileId),
+          "pricingDetail.specss": res.specsVoList,
+          pricingType: res.specsVoList.length ? obj[res.specsVoList[0].specsType] : 'diameterSpecsVos'
         })
         this.selectButtomVarietiesFn(res.stallId);
       }).finally(() => {
@@ -215,7 +216,7 @@ Component({
       if (this.data.collectPriceId !== 'null') this.getDetails();
       // this.selectButtomVarietiesFn()
     },
-    async getCurrentLocation(){
+    async getCurrentLocation() {
       const that = this
       try {
         const res = await wx.authorize({
@@ -263,7 +264,7 @@ Component({
       }
     },
     async getLocation() {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       console.log('getLocation')
@@ -314,7 +315,7 @@ Component({
       }
     },
     onDateChange(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       this.setData({
@@ -324,7 +325,7 @@ Component({
     handleClose(e) {
       console.log('handleClose:', e);
     },
-    setPickerData(key,flag) {
+    setPickerData(key, flag) {
       if (this.data.pickerKay === 'varietyId') {
         const params = {
           primaryKey: key
@@ -334,7 +335,7 @@ Component({
           this.setData({
             specssList: res,
           })
-          if(flag){
+          if (flag) {
             this.setData({
               "pricingDetail.specss": res[this.data.pricingType].map(v => {
                 return {
@@ -374,7 +375,7 @@ Component({
             fvSpecsUnit
           } = this.parseSpecsLabel(label);
           let specssItem = this.data.specssList[this.data.pricingType]
-          const varietyUnit = specssItem.find(v=>v.specsId == e.detail.value[0]) ? specssItem.find(v=>v.specsId == e.detail.value[0]).varietyUnit : item.varietyUnit
+          const varietyUnit = specssItem.find(v => v.specsId == e.detail.value[0]) ? specssItem.find(v => v.specsId == e.detail.value[0]).varietyUnit : item.varietyUnit
           Object.assign(item, {
             fvSpecsMin,
             fvSpecsMax,
@@ -414,7 +415,7 @@ Component({
       console.log('onPickerCancel', e)
     },
     tagClick(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       const key = e.target.dataset.key
@@ -424,10 +425,10 @@ Component({
         "pricingDetail.varietyName": e.currentTarget.dataset.varietyname,
         "categories": this.data.varieties.filter(v => v.varietyId === e.currentTarget.dataset.varietyid)[0].categories
       })
-      this.setPickerData(e.currentTarget.dataset.varietyid,true)
+      this.setPickerData(e.currentTarget.dataset.varietyid, true)
     },
     tagcategoryClick(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       console.log(e)
@@ -457,7 +458,7 @@ Component({
       })
     },
     getLinkerName(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       const key = e.target.dataset.key
@@ -517,7 +518,7 @@ Component({
       })
     },
     pricingTypeFn(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       this.setData({
@@ -536,7 +537,7 @@ Component({
         })
       })
     },
-    getChannelList(){
+    getChannelList() {
       const params = {
         condition: {
           dictType: 'SALE_CHANNEL'
@@ -550,7 +551,7 @@ Component({
       })
     },
     getChannel(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       const key = e.currentTarget.dataset.key
@@ -588,7 +589,7 @@ Component({
       });
     },
     getSpecs(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       if (!this.data.pricingDetail.varietyId) {
@@ -623,7 +624,7 @@ Component({
       })
     },
     showDialog(e) {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       const value = e.currentTarget.dataset.value
@@ -669,10 +670,10 @@ Component({
     isNumberString(str) {
       return typeof str === 'string' && str.trim() !== '' && !isNaN(+str);
     },
-    onblurIpt(e){
+    onblurIpt(e) {
       const isNumber = /^\d+(\.\d+)?$/.test(e.detail.value);
       this.setData({
-        unitPrice:isNumber ? Number(e.detail.value).toFixed(2) : e.detail.value,
+        unitPrice: isNumber ? Number(e.detail.value).toFixed(2) : e.detail.value,
       })
     },
     onInput(e) {
@@ -697,7 +698,7 @@ Component({
       });
     },
     addSpecs() {
-      if(this.data.disabled){
+      if (this.data.disabled) {
         return
       }
       this.data.pricingDetail.specss.push({
@@ -799,35 +800,56 @@ Component({
       const id = e.target.dataset.id
       const key = e.target.dataset.key
       const index = e.target.dataset.index
+      const fs = wx.getFileSystemManager();
       if (['image', 'video'].includes(this.isImageVideoUrl(id))) {
-        const sources = this.data.pricingDetail[key].filter((v, i) => i === index).map(item => {
-          return {
-            url: `${env.ImageUrl}${item}`,
-            type: this.isImageVideoUrl(item)
+        let priceImg = this.data.pricingDetail[key].filter((v, i) => i === index)
+        const sources = priceImg.map(item => {
+          let params = {
+            condition: {
+              primaryKey: item,
+            },
           }
+          return filepreview(params)
         })
-        wx.previewMedia({
-          sources: sources,
-          current: index,
-          fail: (err) => {
-            console.log(err)
-          }
+        wx.showLoading({
+          title: '加载中',
         })
-      } else {
-        wx.downloadFile({
-          url: `${env.ImageUrl}${id}`,
-          // url: `https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/${id}`,
-          success: function (res) {
-            const filePath = res.tempFilePath
-            wx.openDocument({
-              filePath: filePath,
-              success: function (res) {
-                console.log('打开文档成功')
-              }
-            })
-          }
+        Promise.all(sources).then(list => {
+          const sourcesList = priceImg.map((item, index) => {
+            let filePath = wx.env.USER_DATA_PATH + "/" + item;
+            fs.writeFileSync(filePath, // wx.env.USER_DATA_PATH 指定临时文件存入的路径，后面字符串自定义
+              list[index].data,
+              "binary", //二进制流文件必须是 binary
+            )
+            return {
+              url: filePath,
+              type: this.isImageVideoUrl(item)
+            }
+          })
+          wx.hideLoading()
+          wx.previewMedia({
+            sources: sourcesList,
+            fail: (err) => {
+              console.log(err)
+            }
+          })
         })
-      }
+      } 
+      // else {
+      //   wx.downloadFile({
+      //     url: `${env.ImageUrl}${id}`,
+      //     // url: `https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/${id}`,
+      //     success: function (res) {
+      //       const filePath = res.tempFilePath
+      //       wx.openDocument({
+      //         filePath: filePath,
+      //         success: function (res) {
+      //           console.log('打开文档成功')
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     },
     isImageVideoUrl(url) {
       const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
@@ -853,11 +875,11 @@ Component({
       }
       reportLargePrice(params).then((res) => {
         this.toast('保存成功', 'success')
-        setTimeout(()=>{
+        setTimeout(() => {
           wx.navigateBack({
             delta: this.data.delta ? Number(this.data.delta) : 1
           })
-        },1000)
+        }, 1000)
 
       }).finally(() => {
         this.setData({
@@ -881,8 +903,8 @@ Component({
         this.toast('请选择品种小类', 'warning')
         return
       }
-      if(!(this.data.pricingDetail.specss.length > 0 && this.data.pricingDetail.specss.every(v=>v.unitPrice && v.saleChannelCode))){
-        this.toast('请填写规格','warning')
+      if (!(this.data.pricingDetail.specss.length > 0 && this.data.pricingDetail.specss.every(v => v.unitPrice && v.saleChannelCode))) {
+        this.toast('请填写规格', 'warning')
         return
       }
       this.setData({

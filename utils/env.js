@@ -15,16 +15,19 @@ let env = {
 
 switch (envVersion) {
   case "develop":
-    env.baseURL = "https://www.zhixunchelian.com/price_backend/weixin";
+    // env.baseURL = "https://www.zhixunchelian.com/price_backend/weixin";
     // env.baseURL = "https:///uat.zhixunchelian.com/price_backend/weixin";
-    // env.baseURL = "http://192.168.8.174:8099/price_backend/weixin";
-    env.ImageUrl = 'https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/'
+    env.baseURL = "http://192.168.8.40:8099/price_backend/weixin";
+    // env.ImageUrl = 'https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/'
+    env.ImageUrl = 'https://webxtx-prd.oss-cn-shenzhen.aliyuncs.com/price_saas/'
     break;
 
   case "trial":
     // env.baseURL = "http://192.168.8.174:8099/price_backend/weixin";
+    // env.baseURL = "https://www.zhixunchelian.com/price_backend/weixin";
     env.baseURL = "https://uat.zhixunchelian.com/price_backend/weixin";
-    env.ImageUrl = 'https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/'
+    // env.ImageUrl = 'https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/'
+    env.ImageUrl = 'https://webxtx-prd.oss-cn-shenzhen.aliyuncs.com/price_saas/'
     break;
 
   case "release":

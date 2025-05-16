@@ -3,8 +3,9 @@ import {
 } from "./api";
 
 const socketUrl = {
-  develop: 'wss://uat.zhixunchelian.com/price_backend', // 开发版本地后端
+  develop: 'wss://www.zhixunchelian.com/price_backend', // 开发版本地后端
   // develop: 'ws://192.168.8.174:8099/price_backend', // 开发版本地后端
+  // trial: 'wss://www.zhixunchelian.com/price_backend', // 正式版
   trial: 'wss://uat.zhixunchelian.com/price_backend', // 体验版
   // trial: 'ws://192.168.8.174:8099/price_backend', // 体验版
   release: 'wss://www.zhixunchelian.com/price_backend' // 正式版
@@ -62,13 +63,18 @@ const linkSocket = () => {
         })
       }
       if (['20037', '20038'].includes(code)) {
-        const pages = getCurrentPages();
-        const currentPagePath = pages.length > 0 ? pages[pages.length - 1].route : '';
-        const page = currentPagePath.split('/')[1]
-        console.log(page)
-        wx.navigateTo({
-          url: `/pages/trtc/trtc?data=${JSON.stringify(data)}&page=${page}`
-        })
+          const pages = getCurrentPages();
+          const currentPagePath = pages.length > 0 ? pages[pages.length - 1].route : '';
+          const page = currentPagePath.split('/')[1]
+          console.log(page)
+          console.log(page,'page-------20038')
+          wx.navigateTo({
+            url: `/pages/trtc/trtc?data=${JSON.stringify(data)}&page=${page}`,
+            fail(err){
+              console.log('跳转视频页面报错',err)
+            }
+          })
+ 
       }
       // if (['20038'].includes(code)) {
       //   const pages = getCurrentPages();

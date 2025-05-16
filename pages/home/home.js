@@ -54,9 +54,6 @@ Page({
     userInfo: {},
     token:""
   },
-  onLoad() {
-    linkSocket()
-  },
   logOut() {
     wx.showModal({
       title: '提示',
@@ -73,6 +70,7 @@ Page({
     })
   },
   onShow() {
+    linkSocket()
     this.setData({
       userInfo: wx.getStorageSync('userInfo'),
       token:wx.getStorageSync('token')

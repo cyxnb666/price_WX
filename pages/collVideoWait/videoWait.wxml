@@ -1,2 +1,12 @@
-<!--pages/collVideoWait/videoWait.wxml-->
-<text>pages/collVideoWait/videoWait.wxml</text>
+    <view class="q-waitpage-box">
+      <view class="q-waitpage-tps1">正在邀请农户接听电话</view>
+      <view class="q-waitpage-imgbox1">
+        <image src="/pages/images/kf.png" style="{{ 'opacity:' + opacity }}"></image>
+      </view>
+      <view class="bottom">
+          <view class="q-waitpage-imgbox2" bindtap="hangDown">
+            <image src="/pages/images/hangUp.png"></image>
+          </view>
+          <!-- <view class="q-waitpage-handtext">挂断</view> -->
+      </view>
+    </view>

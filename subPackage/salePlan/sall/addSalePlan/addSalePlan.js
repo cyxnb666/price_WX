@@ -3,6 +3,7 @@ import {
   selectCurrentStall,
   selectStallFruiveggies,
   regeo,
+  filepreview,
   selectStallLinkers,
   softRemoveFile,
   saveLargeSalePlan,
@@ -451,35 +452,54 @@ Page({
     const key = e.target.dataset.key
     const index = e.target.dataset.index
     if (['image', 'video'].includes(isImageVideoUrl(id))) {
-      const sources = this.data.salePalnDetail[key].filter((v, i) => i == index).map(item => {
-        return {
-          url: `${env.ImageUrl}${item}`,
-          type: isImageVideoUrl(item)
-        }
-      })
-      console.log(sources, 'sources')
-      wx.previewMedia({
-        sources: sources,
-        current: index,
-        fail: (err) => {
-          console.log(err)
-        }
-      })
-    } else {
-      wx.downloadFile({
-        url: `${env.ImageUrl}${id}`,
-        // url: `https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/${id}`,
-        success: function (res) {
-          const filePath = res.tempFilePath
-          wx.openDocument({
-            filePath: filePath,
-            success: function (res) {
-              console.log('打开文档成功')
+      let priceImg = this.data.salePalnDetail[key].filter((v, i) => i === index)
+        const sources = priceImg.map(item => {
+          let params = {
+            condition: {
+              primaryKey: item,
+            },
+          }
+          return filepreview(params)
+        })
+        wx.showLoading({
+          title: '加载中',
+        })
+        Promise.all(sources).then(list => {
+          const sourcesList = priceImg.map((item, index) => {
+            let filePath = wx.env.USER_DATA_PATH + "/" + item;
+            fs.writeFileSync(filePath, // wx.env.USER_DATA_PATH 指定临时文件存入的路径，后面字符串自定义
+              list[index].data,
+              "binary", //二进制流文件必须是 binary
+            )
+            return {
+              url: filePath,
+              type: isImageVideoUrl(item)
             }
           })
-        }
-      })
-    }
+          wx.hideLoading()
+          wx.previewMedia({
+            sources: sourcesList,
+            fail: (err) => {
+              console.log(err)
+            }
+          })
+        })
+    } 
+    // else {
+    //   wx.downloadFile({
+    //     url: `${env.ImageUrl}${id}`,
+    //     // url: `https://webxtx-test-sz.oss-cn-shenzhen.aliyuncs.com/price_saas/${id}`,
+    //     success: function (res) {
+    //       const filePath = res.tempFilePath
+    //       wx.openDocument({
+    //         filePath: filePath,
+    //         success: function (res) {
+    //           console.log('打开文档成功')
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

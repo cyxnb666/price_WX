@@ -103,6 +103,40 @@ class WxRequest {
             reject(this.interceptors.response(mergeErr));
           },
         });
+      } else if (options.responseType == "arraybuffer") {
+        wx.request({
+          ...options,
+
+          // 接口调用成功的回调函数
+          success: (res) => {
+            resolve(res);
+          },
+
+          // 接口调用失败的回调函数
+          fail: (err) => {
+            // 不管接口成功还是失败，都需要调用响应拦截器
+            const mergeRes = Object.assign({}, err, {
+              config: options, //请求参数
+              isSuccess: false, //执行了fail
+            });
+            reject(this.interceptors.response(mergeRes));
+          },
+          complete: () => {
+            // 如果需要显示 loading ，那么就需要控制 loading 的隐藏
+            if (options.isLoading) {
+              // 在每一个请求结束以后，都会执行 complete 回调函数
+              // 每次从 queue 队列中删除一个标识
+              this.queue.pop();
+              // 解决并发请求，loading 闪烁问题
+              this.queue.length === 0 && this.queue.push("request");
+              this.timerId = setTimeout(() => {
+                this.queue.pop();
+                this.queue.length === 0 && wx.hideLoading();
+                clearTimeout(this.timerId);
+              }, 1);
+            }
+          },
+        });
       } else {
         wx.request({
           ...options,
@@ -307,7 +341,7 @@ instance.interceptors.response = async (response) => {
     // if (data.retCode === 403)
     wx.showLoading();
     wx.hideLoading();
-    console.log(NotToastURl.every(v => config.url.indexOf(v) == -1),'NotToastURl.every(v => config.url.indexOf(v) == -1)')
+    console.log(NotToastURl.every(v => config.url.indexOf(v) == -1), 'NotToastURl.every(v => config.url.indexOf(v) == -1)')
     if (NotToastURl.every(v => config.url.indexOf(v) == -1)) {
       setTimeout(() => {
         wx.showToast({

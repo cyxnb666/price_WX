@@ -410,8 +410,22 @@ Page({
         success: () => {
           let pages = getCurrentPages();
           if (pages[pages.length - 2].route == "pages/collVideoWait/videoWait") {
+            const photos = {
+              priceFileIds: _this.data.priceFileIds,
+              collectFileIds: _this.data.collectFileIds
+            }
+            console.log(photos,'photos==')
             wx.navigateBack({
               delta: 2,
+              success: () => {
+                console.log(_this.data.page,'_this.data.page')
+                if (_this.data.page === 'home') return;
+                const pages = getCurrentPages();
+                const prevPage = pages[pages.length - 3];
+                console.log(prevPage, 'prevPage---')
+                console.log(pages, 'pages---')
+                prevPage.setPhotos(photos)
+              }
             });
           } else {
             wx.navigateBack();
@@ -431,59 +445,59 @@ Page({
   },
   onUnload() {
     const _this = this;
-    let params = {
-      "code": wx.getStorageSync('userInfo').roleCode === "STALL_LINKER" ? "20006" : "20007",
-      "data": {
-        "receiveUserId": this.data.userId,
-        "userId": wx.getStorageSync('userInfo').accountNo
-      }
-    }
-    if (wx.getStorageSync('userInfo').roleCode === "STALL_LINKER") {
-      params = {
-        "code": "20006",
-        "data": {
-          "receiveUserId": this.data.userId,
-          "userId": wx.getStorageSync('userInfo').accountNo
-        }
-      }
-      wx.showToast({
-        title: '视频已挂断',
-        icon: 'none',
-        success: () => {
-          let pages = getCurrentPages();
-          if (pages[pages.length - 2].route == "pages/videowait/videowait") {
-            wx.navigateBack({
-              delta: 2,
-            });
-          } else {
-            wx.navigateBack();
-          }
-        }
-      });
-    } else {
-      params = {
-        "code": "20007",
-        "data": {
-          "receiveUserId": wx.getStorageSync('userInfo').accountNo,
-          "userId": this.data.receiveUserId
-        }
-      }
-      wx.showToast({
-        title: '视频已挂断',
-        icon: 'none',
-        success: () => {
-          let pages = getCurrentPages();
-          if (pages[pages.length - 2].route == "pages/collVideoWait/videoWait") {
-            wx.navigateBack({
-              delta: 2,
-            });
-          } else {
-            wx.navigateBack();
-          }
-        }
-      });
-    }
-    sendData(params)
+    // let params = {
+    //   "code": wx.getStorageSync('userInfo').roleCode === "STALL_LINKER" ? "20006" : "20007",
+    //   "data": {
+    //     "receiveUserId": this.data.userId,
+    //     "userId": wx.getStorageSync('userInfo').accountNo
+    //   }
+    // }
+    // if (wx.getStorageSync('userInfo').roleCode === "STALL_LINKER") {
+    //   params = {
+    //     "code": "20006",
+    //     "data": {
+    //       "receiveUserId": this.data.userId,
+    //       "userId": wx.getStorageSync('userInfo').accountNo
+    //     }
+    //   }
+    //   wx.showToast({
+    //     title: '视频已挂断',
+    //     icon: 'none',
+    //     success: () => {
+    //       let pages = getCurrentPages();
+    //       if (pages[pages.length - 2].route == "pages/videowait/videowait") {
+    //         wx.navigateBack({
+    //           delta: 2,
+    //         });
+    //       } else {
+    //         wx.navigateBack();
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   params = {
+    //     "code": "20007",
+    //     "data": {
+    //       "receiveUserId": wx.getStorageSync('userInfo').accountNo,
+    //       "userId": this.data.receiveUserId
+    //     }
+    //   }
+    //   wx.showToast({
+    //     title: '视频已挂断',
+    //     icon: 'none',
+    //     success: () => {
+    //       let pages = getCurrentPages();
+    //       if (pages[pages.length - 2].route == "pages/collVideoWait/videoWait") {
+    //         wx.navigateBack({
+    //           delta: 2,
+    //         });
+    //       } else {
+    //         wx.navigateBack();
+    //       }
+    //     }
+    //   });
+    // }
+    // sendData(params)
     _this.exitRoom();
 
   },

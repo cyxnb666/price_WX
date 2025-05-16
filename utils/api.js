@@ -1,4 +1,10 @@
 import instance from '../utils/request'
+
+/**
+ * @description 获取n信息
+ * @returns Promise
+ */
+export const filepreview = (data) => instance.post(`/file/preview`,data,{responseType: "arraybuffer"})
 /**
  * @description 获取n信息
  * @returns Promise
