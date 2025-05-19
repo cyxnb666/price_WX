@@ -38,6 +38,18 @@ Component({
         "UG": "元/斤",
         "UKG": "元/公斤"
       }
+    },
+    showDiameterSection: {
+      type: Boolean,
+      value: false
+    },
+    showWeightSection: {
+      type: Boolean,
+      value: false
+    },
+    showBulkSection: {
+      type: Boolean,
+      value: false
     }
   },
 
@@ -52,6 +64,16 @@ Component({
     specssIndex: null,
     inputType: '', // price 或 weight
     inputSection: '', // diameter, weight 或 bulk
+  },
+
+  observers: {
+    'showDiameterSection, showWeightSection, showBulkSection': function (showDiameter, showWeight, showBulk) {
+      this.setData({
+        showDiameter,
+        showWeight,
+        showBulk
+      });
+    }
   },
 
   methods: {

@@ -165,41 +165,138 @@ Page({
             this.toast('获取规格列表失败', 'error');
         });
     },
-
-    /**
-     * 加载已有数据（编辑模式）
-     */
     loadExistingData() {
-        console.log('加载已有数据，采价ID:', this.data.collectPriceId);
+        console.log('加载已有数据，collectCategoryId:', this.data.collectCategoryId);
 
-        // 在实际项目中，这里应调用API获取已有数据
-        // const params = {
-        //   condition: {
-        //     primaryKey: this.data.collectPriceId
-        //   }
-        // };
+        // 显示加载提示
+        wx.showLoading({
+            title: '加载中...'
+        });
 
-        // getCollectPrice(params).then((res) => {
-        //   // 处理返回的数据
-        //   this.setData({
-        //     diameterData: res.diameterData || this.data.diameterData,
-        //     weightData: res.weightData || this.data.weightData,
-        //     bulkData: res.bulkData || this.data.bulkData,
-        //     priceFileIds: res.priceFileIds || [],
-        //     collectFileIds: res.collectFileIds || []
-        //   });
-        // });
+        const params = {
+            condition: {
+                primaryKey: this.data.collectCategoryId
+            }
+        };
 
-        // 暂时使用模拟数据
-        setTimeout(() => {
+        getOwnerCollectCategory(params).then((res) => {
+            console.log('获取小类采价信息成功:', res);
+
+            if (!res || !res.specss) {
+                console.log('没有找到采价数据或数据为空');
+                wx.hideLoading();
+                return;
+            }
+
+            // 初始化三种价格类型的数据
+            let diameterData = [];
+            let weightData = [];
+            let bulkData = { price: '', weight: '' };
+            let showDiameter = false;
+            let showWeight = false;
+            let showBulk = false;
+
+            // 处理规格数据
+            if (res.specss && res.specss.length > 0) {
+                res.specss.forEach(item => {
+                    // 为每个规格添加显示所需的附加字段
+                    if (item.saleChannelCode) {
+                        item.saleChannelName = item.saleChannelCnm;
+                    }
+
+                    // 生成规格名称
+                    if (item.specsId && (item.specsType === 'DIAMETER' || item.specsType === 'WEIGHT')) {
+                        let specsName = '';
+                        if (item.fvSpecsMin !== null && item.fvSpecsMax !== null) {
+                            specsName = `${item.fvSpecsMin} ${item.fvSpecsUnit}-${item.fvSpecsMax} ${item.fvSpecsUnit}`;
+                        } else if (item.fvSpecsMin === null) {
+                            specsName = `${item.fvSpecsMax} ${item.fvSpecsUnit} 以下`;
+                        } else if (item.fvSpecsMax === null) {
+                            specsName = `${item.fvSpecsMin} ${item.fvSpecsUnit} 以上`;
+                        }
+                        item.specsName = specsName;
+                    }
+
+                    // 按类型分类数据
+                    if (item.specsType === 'DIAMETER') {
+                        diameterData.push(item);
+                        showDiameter = true;
+                    } else if (item.specsType === 'WEIGHT') {
+                        weightData.push(item);
+                        showWeight = true;
+                    } else if (item.specsType === 'WHOLE') {
+                        bulkData = {
+                            price: item.unitPrice,
+                            weight: item.weight
+                        };
+                        showBulk = true;
+                    }
+                });
+            }
+
+            // 如果某种类型没有数据，添加一个默认项
+            if (diameterData.length === 0) {
+                diameterData.push({
+                    fvSpecsMax: 0,
+                    fvSpecsMin: 0,
+                    fvSpecsUnit: "",
+                    saleChannelCode: "SCH_JXS",
+                    specsId: 0,
+                    specsType: "DIAMETER",
+                    unitPrice: 0,
+                    weight: 0,
+                    varietyUnit: "UG",
+                });
+            }
+
+            if (weightData.length === 0) {
+                weightData.push({
+                    fvSpecsMax: 0,
+                    fvSpecsMin: 0,
+                    fvSpecsUnit: "",
+                    saleChannelCode: "SCH_JXS",
+                    specsId: 0,
+                    specsType: "WEIGHT",
+                    unitPrice: 0,
+                    weight: 0,
+                    varietyUnit: "UG",
+                });
+            }
+
+            // 更新界面数据
             this.setData({
-                diameterData: [...this.data.diameterData],
-                weightData: [...this.data.weightData],
-                bulkData: { ...this.data.bulkData },
-                priceFileIds: [],
-                collectFileIds: []
+                diameterData: diameterData,
+                weightData: weightData,
+                bulkData: bulkData,
+                showDiameter: showDiameter,
+                showWeight: showWeight,
+                showBulk: showBulk,
+                priceFileIds: res.priceFileIds || [],
+                collectFileIds: res.collectFileIds || []
+            }, () => {
+                // Añadir este log para verificar que los estados se establecen correctamente
+                console.log('设置显示状态:', {
+                    showDiameter: this.data.showDiameter,
+                    showWeight: this.data.showWeight,
+                    showBulk: this.data.showBulk
+                });
             });
-        }, 500);
+
+            console.log('数据加载完成，各部分状态:', {
+                showDiameter,
+                showWeight,
+                showBulk,
+                diameterData,
+                weightData,
+                bulkData
+            });
+
+        }).catch(err => {
+            console.error('获取小类采价信息失败:', err);
+            this.toast('加载数据失败', 'error');
+        }).finally(() => {
+            wx.hideLoading();
+        });
     },
 
     /**

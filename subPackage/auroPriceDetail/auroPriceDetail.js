@@ -1228,13 +1228,14 @@ Page({
   },
 
   // 处理点击品种小类
-  // For the handleCategoryClick function, include collectCategoryId when navigating to categoryDetail
   handleCategoryClick(e) {
     const categoryId = e.currentTarget.dataset.id;
     const categoryName = e.currentTarget.dataset.name;
     const collectCategoryId = e.currentTarget.dataset.collectcategoryid;
 
-    // Navigate to categoryDetail with all required parameters
+    console.log('点击品种小类, collectCategoryId:', collectCategoryId);
+
+    // 导航到categoryDetail页面并传递所有必要参数
     wx.navigateTo({
       url: `/subPackage/categoryDetail/categoryDetail?categoryId=${categoryId}&categoryName=${categoryName}&varietyId=${this.data.pricingDetail.varietyId}&varietyName=${this.data.pricingDetail.varietyName}&stallId=${this.data.pricingDetail.stallId}&collectCategoryId=${collectCategoryId}`
     });

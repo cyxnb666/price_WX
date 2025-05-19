@@ -22,6 +22,9 @@
 	 bind:selectItem="handleSelectItem"
 	 bind:toast="handleToast"
 	 bind:sectionToggle="handleSectionToggle"
+	 showDiameterSection="{{showDiameter}}"
+	 showWeightSection="{{showWeight}}"
+	 showBulkSection="{{showBulk}}"
 	/>
 
 	<!-- 价格佐证凭据部分 -->
