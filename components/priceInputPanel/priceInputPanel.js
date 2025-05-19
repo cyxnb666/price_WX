@@ -40,7 +40,7 @@ Component({
       }
     }
   },
-  
+
   data: {
     showDiameter: false,
     showWeight: false,
@@ -53,7 +53,7 @@ Component({
     inputType: '', // price 或 weight
     inputSection: '', // diameter, weight 或 bulk
   },
-  
+
   methods: {
     // 切换显示状态
     toggleSection(e) {
@@ -61,8 +61,14 @@ Component({
       this.setData({
         [`show${section}`]: !this.data[`show${section}`]
       });
+
+      // 通知父组件显示状态已变更
+      this.triggerEvent('sectionToggle', {
+        section: section,
+        show: this.data[`show${section}`]
+      });
     },
-    
+
     // 添加规格行
     addSpecs(e) {
       const section = e.currentTarget.dataset.section;
@@ -78,28 +84,28 @@ Component({
         weight: 0,
         varietyUnit: "UG",
       });
-      
+
       this.triggerEvent('update', {
         type: section,
         data: data
       });
     },
-    
+
     // 删除规格行
     removeSpecs(e) {
       const section = e.currentTarget.dataset.section;
       const index = e.currentTarget.dataset.index;
       let data = [...this.data[`${section}Data`]];
-      
+
       if (data.length <= 1) return;
-      
+
       data.splice(index, 1);
       this.triggerEvent('update', {
         type: section,
         data: data
       });
     },
-    
+
     // 显示输入对话框
     showInputDialog(e) {
       const value = e.currentTarget.dataset.value;
@@ -107,7 +113,7 @@ Component({
       const unit = e.currentTarget.dataset.unit;
       const type = e.currentTarget.dataset.type;
       const section = e.currentTarget.dataset.section;
-      
+
       this.setData({
         showWithInput: true,
         unitPrice: value,
@@ -117,28 +123,28 @@ Component({
         inputSection: section
       });
     },
-    
+
     // 处理输入变化
     onInput(e) {
       this.setData({
         [this.data.inputType === 'price' ? 'unitPrice' : 'weight']: e.detail.value
       });
     },
-    
+
     // 清除输入
     onInputClear() {
       this.setData({
         [this.data.inputType === 'price' ? 'unitPrice' : 'weight']: null
       });
     },
-    
+
     // 关闭对话框
     closeDialog(e) {
       if (e.type === "confirm") {
         const type = this.data.inputType;
         const section = this.data.inputSection;
         const value = type === 'price' ? this.data.unitPrice : this.data.weight;
-        
+
         if (!value) {
           this.triggerEvent('toast', {
             message: `请输入${type === 'price' ? '价格' : '重量'}`,
@@ -146,7 +152,7 @@ Component({
           });
           return;
         }
-        
+
         if (!/^\d+(\.\d+)?$/.test(value)) {
           this.triggerEvent('toast', {
             message: '请输入有效的数字',
@@ -154,12 +160,12 @@ Component({
           });
           return;
         }
-        
+
         if (section === 'bulk') {
           // 更新统果数据
-          let bulkData = {...this.data.bulkData};
+          let bulkData = { ...this.data.bulkData };
           bulkData[type === 'price' ? 'price' : 'weight'] = value;
-          
+
           this.triggerEvent('update', {
             type: 'bulk',
             data: bulkData
@@ -168,38 +174,38 @@ Component({
           // 更新规格数据
           let data = [...this.data[`${section}Data`]];
           data[this.data.specssIndex][type === 'price' ? 'unitPrice' : 'weight'] = value;
-          
+
           this.triggerEvent('update', {
             type: section,
             data: data
           });
         }
       }
-      
+
       this.setData({
         showWithInput: false,
         unitPrice: null,
         weight: null
       });
     },
-    
+
     // 选择渠道
     selectChannel(e) {
       const section = e.currentTarget.dataset.section;
       const index = e.currentTarget.dataset.index;
-      
+
       this.triggerEvent('selectItem', {
         type: 'channel',
         section: section,
         index: index
       });
     },
-    
+
     // 选择规格
     selectSpecs(e) {
       const section = e.currentTarget.dataset.section;
       const index = e.currentTarget.dataset.index;
-      
+
       this.triggerEvent('selectItem', {
         type: 'specs',
         section: section,

@@ -8,7 +8,9 @@ import {
     selectVarietySpecss,    // 查询规格数据API
     saveCollectPrice,       // 保存采价数据API
     filepreview,            // 文件预览API
-    softRemoveFile          // 文件删除API
+    softRemoveFile,          // 文件删除API
+    saveOwnerCollectCategoryPrice,
+    getOwnerCollectCategory
 } from "../../utils/api";
 import { Toast } from "tdesign-miniprogram";  // 提示组件
 import { env } from "../../utils/env";        // 环境配置
@@ -91,15 +93,18 @@ Page({
 
         // 获取传递的参数
         this.setData({
+            showDiameter: true, // 默认显示按果径
+            showWeight: false,
+            showBulk: false,
             categoryId: options.categoryId || '',
             categoryName: options.categoryName || '',
             varietyId: options.varietyId || '',
             varietyName: options.varietyName || '',
             stallId: options.stallId || '',
             stallName: options.stallName || '',
-            collectPriceId: options.collectPriceId || '',
-            priceFileIds: ['测试价格凭据文件1.jpg', '测试价格凭据文件2.jpg'],
-            collectFileIds: ['测试采价记录文件1.jpg', '测试采价记录文件2.jpg']
+            collectCategoryId: options.collectCategoryId || '', // 添加这行
+            priceFileIds: [],
+            collectFileIds: []
         });
 
         // 初始化数据
@@ -110,7 +115,7 @@ Page({
         }
 
         // 如果有collectPriceId，表示编辑模式，加载已有数据
-        if (this.data.collectPriceId) {
+        if (this.data.collectCategoryId) {
             this.loadExistingData();
         }
     },
@@ -582,15 +587,15 @@ Page({
      */
     hasValidData() {
         // 检查按果径数据
-        const hasDiameterData = this.data.diameterData.some(item =>
+        const hasDiameterData = this.data.showDiameter && this.data.diameterData.some(item =>
             item.saleChannelCode && item.specsId && item.unitPrice && item.weight);
 
         // 检查按重量数据
-        const hasWeightData = this.data.weightData.some(item =>
+        const hasWeightData = this.data.showWeight && this.data.weightData.some(item =>
             item.saleChannelCode && item.specsId && item.unitPrice && item.weight);
 
         // 检查统果数据
-        const hasBulkData = this.data.bulkData.price && this.data.bulkData.weight;
+        const hasBulkData = this.data.showBulk && this.data.bulkData.price && this.data.bulkData.weight;
 
         return hasDiameterData || hasWeightData || hasBulkData;
     },
@@ -600,73 +605,83 @@ Page({
      * @param {string} submitType 提交类型，0表示暂存，1表示提交
      */
     saveData(submitType) {
+        // 构建规格数据数组
+        let specss = [];
+
+        // 只加入已勾选的规格类型数据
+        if (this.data.showDiameter) {
+            // 过滤有效的按果径数据
+            const validDiameterData = this.filterValidData(this.data.diameterData);
+            if (validDiameterData.length > 0) {
+                // 添加规格类型
+                validDiameterData.forEach(item => {
+                    item.specsType = "DIAMETER";
+                });
+                specss = specss.concat(validDiameterData);
+            }
+        }
+
+        if (this.data.showWeight) {
+            // 过滤有效的按重量数据
+            const validWeightData = this.filterValidData(this.data.weightData);
+            if (validWeightData.length > 0) {
+                // 添加规格类型
+                validWeightData.forEach(item => {
+                    item.specsType = "WEIGHT";
+                });
+                specss = specss.concat(validWeightData);
+            }
+        }
+
+        if (this.data.showBulk && this.data.bulkData.price && this.data.bulkData.weight) {
+            // 添加统果数据
+            specss.push({
+                specsType: "WHOLE",
+                unitPrice: this.data.bulkData.price,
+                weight: this.data.bulkData.weight,
+            });
+        }
+
         // 构建保存参数
         const params = {
             condition: {
-                categoryId: this.data.categoryId,
-                categoryName: this.data.categoryName,
-                varietyId: this.data.varietyId,
-                varietyName: this.data.varietyName,
-                stallId: this.data.stallId,
-                stallName: this.data.stallName,
-                submitType: submitType,
-
-                // 组合所有价格数据
-                diameterData: this.filterValidData(this.data.diameterData),
-                weightData: this.filterValidData(this.data.weightData),
-                bulkData: this.data.bulkData,
-
-                // 文件ID列表
+                collectCategoryId: this.data.collectCategoryId,
                 priceFileIds: this.data.priceFileIds,
                 collectFileIds: this.data.collectFileIds,
-
-                // 如果有collectPriceId，表示更新已有数据
-                collectPriceId: this.data.collectPriceId || ''
+                specss: specss,
+                submitType: submitType
             }
         };
 
         console.log('保存数据参数:', params);
 
-        // 这里应该调用实际的API保存数据
-        // saveCollectPrice(params).then((res) => {
-        //   this.toast('保存成功', 'success');
-        //   
-        //   // 延迟返回上一页
-        //   setTimeout(() => {
-        //     wx.navigateBack();
-        //   }, 1500);
-        // }).catch(err => {
-        //   this.toast(err.message || '保存失败', 'error');
-        // }).finally(() => {
-        //   this.setData({
-        //     stagingLoading: false,
-        //     submitLoading: false
-        //   });
-        // });
-
-        // 模拟保存
-        setTimeout(() => {
+        // 调用API保存数据
+        saveOwnerCollectCategoryPrice(params).then((res) => {
             this.toast('保存成功', 'success');
 
             // 延迟返回上一页
             setTimeout(() => {
                 wx.navigateBack();
             }, 1500);
-
+        }).catch(err => {
+            this.toast(err.message || '保存失败', 'error');
+        }).finally(() => {
             this.setData({
                 stagingLoading: false,
                 submitLoading: false
             });
-        }, 1000);
+        });
     },
 
-    /**
-     * 过滤有效数据
-     * @param {Array} dataArray 数据数组
-     * @returns {Array} 过滤后的有效数据
-     */
     filterValidData(dataArray) {
         return dataArray.filter(item =>
             item.saleChannelCode && item.specsId && item.unitPrice && item.weight);
+    },
+    handleSectionToggle(e) {
+        const { section, show } = e.detail;
+        this.setData({
+            [`show${section}`]: show
+        });
+        console.log(`${section}显示状态已更新为: ${show}`);
     }
 });

@@ -285,3 +285,15 @@ export const ownerRemoveCollectCategory = (data) => instance.post('/owner/remove
  * @returns Promise
  */
 export const ownerAddCollectCategory = (data) => instance.post('/owner/addCollectCategory', data)
+/**
+ * @description 保存小类采价信息
+ * @param {Object} data
+ * @returns Promise
+ */
+export const saveOwnerCollectCategoryPrice = (data) => instance.post('/owner/saveOwnerCollectCategoryPrice', data)
+/**
+ * @description 获取小类采价信息
+ * @param {Object} data
+ * @returns Promise
+ */
+export const getOwnerCollectCategory = (data) => instance.post('/owner/getOwnerCollectCategory', data)

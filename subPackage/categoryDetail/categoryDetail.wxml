@@ -1,82 +1,175 @@
-<navigation-bar title="{{categoryName}}" back="{{true}}"></navigation-bar>
+<navigation-bar title="{{categoryName}}" back="{{true}}" />
 
 <!-- 使用scroll-view包装整个内容区 -->
-<scroll-view scroll-y="true" class="category-detail" enhanced="true" show-scrollbar="true" bounces="true">
-  <!-- 价格输入面板组件 -->
-  <price-input-panel
-    diameterData="{{diameterData}}"
-    weightData="{{weightData}}"
-    bulkData="{{bulkData}}"
-    channel="{{channel}}"
-    diameterSpecs="{{specssList.diameterSpecsVos}}"
-    weightSpecs="{{specssList.weightSpecsVos}}"
-    disabled="{{disabled}}"
-    varietyUnit="{{varietyUnit}}"
-    bind:update="handleUpdate"
-    bind:selectItem="handleSelectItem"
-    bind:toast="handleToast"
-  ></price-input-panel>
-  
-  <!-- 价格佐证凭据部分 -->
-  <view class="evidence-section">
-    <t-cell title="价格佐证凭证">
-      <view slot="description">
-        <view class="tips">
-          上传的凭据需要能够反映下单（销售订单合同、微信聊天截图）、发货（发货单等）、真实回款凭据（银行收款回执单、微信账单、美团商户平台交易记录）、发票等，需要能够反映出单价真实性。
-        </view>
-        <t-grid class="block" column="{{3}}" wx:if="{{!disabled}}">
-          <t-grid-item t-class-image="image" text="凭证拍照" icon="camera" data-type="camera" data-key="priceFileIds" bindtap="chooseMedia" />
-          <t-grid-item t-class-image="image" text="手机上传凭证" icon="folder-move" data-type="album" data-key="priceFileIds" bindtap="chooseMedia" />
-          <t-grid-item t-class-image="image" text="微信聊天文件" icon="cloud-upload" data-key="priceFileIds" bindtap="chooseMessageFile" />
-        </t-grid>
-      </view>
-    </t-cell>
-    
-    <t-swipe-cell wx:for="{{priceFileIds}}" wx:key="index">
-      <t-cell title="{{(index+1)+'. '+item}}" arrow hover data-key="priceFileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview" />
-      <view slot="right" class="btn delete-btn" data-key="priceFileIds" data-index="{{index}}" data-id="{{item}}" bind:tap="fileDelete">删除</view>
-    </t-swipe-cell>
-  </view>
-  
-  <!-- 采价记录部分 -->
-  <view class="record-section">
-    <t-cell title="采价记录">
-      <view slot="description">
-        <view class="tips">
-          为了保障您的权益和公平公正，需要您上传一些销售凭据以作证您上报的价格，您上传的数据我们将严格保密，不会泄露和另作他用，若因数据泄露造成的问题，我们将承担相应的损失和法律责任。
-        </view>
-        <t-grid class="block" column="{{2}}" wx:if="{{!disabled}}">
-          <t-grid-item t-class-image="image" text="凭证拍照" icon="camera" data-type="camera" data-key="collectFileIds" bindtap="chooseMedia" />
-          <t-grid-item t-class-image="image" text="手机上传凭证" icon="folder-move" data-type="album" data-key="collectFileIds" bindtap="chooseMedia" />
-        </t-grid>
-      </view>
-    </t-cell>
-    
-    <t-swipe-cell wx:for="{{collectFileIds}}" wx:key="index">
-      <t-cell title="{{(index+1)+'. '+item}}" arrow hover data-key="collectFileIds" data-index="{{index}}" data-id="{{item}}" bindtap="preview" />
-      <view slot="right" class="btn delete-btn" data-key="collectFileIds" data-index="{{index}}" data-id="{{item}}" bind:tap="fileDelete">删除</view>
-    </t-swipe-cell>
-  </view>
-  
-  <!-- 额外的底部间距 -->
-  <view style="height: 120rpx;"></view>
+<scroll-view
+ scroll-y="true"
+ class="category-detail"
+ enhanced="true"
+ show-scrollbar="true"
+ bounces="true"
+>
+	<!-- 价格输入面板组件 -->
+	<price-input-panel
+	 diameterData="{{diameterData}}"
+	 weightData="{{weightData}}"
+	 bulkData="{{bulkData}}"
+	 channel="{{channel}}"
+	 diameterSpecs="{{specssList.diameterSpecsVos}}"
+	 weightSpecs="{{specssList.weightSpecsVos}}"
+	 disabled="{{disabled}}"
+	 varietyUnit="{{varietyUnit}}"
+	 bind:update="handleUpdate"
+	 bind:selectItem="handleSelectItem"
+	 bind:toast="handleToast"
+	 bind:sectionToggle="handleSectionToggle"
+	/>
+
+	<!-- 价格佐证凭据部分 -->
+	<view class="evidence-section">
+		<t-cell title="价格佐证凭证">
+			<view slot="description">
+				<view class="tips">
+					上传的凭据需要能够反映下单（销售订单合同、微信聊天截图）、发货（发货单等）、真实回款凭据（银行收款回执单、微信账单、美团商户平台交易记录）、发票等，需要能够反映出单价真实性。
+				</view>
+				<t-grid class="block" column="{{3}}" wx:if="{{!disabled}}">
+					<t-grid-item
+					 t-class-image="image"
+					 text="凭证拍照"
+					 icon="camera"
+					 data-type="camera"
+					 data-key="priceFileIds"
+					 bindtap="chooseMedia"
+					/>
+					<t-grid-item
+					 t-class-image="image"
+					 text="手机上传凭证"
+					 icon="folder-move"
+					 data-type="album"
+					 data-key="priceFileIds"
+					 bindtap="chooseMedia"
+					/>
+					<t-grid-item
+					 t-class-image="image"
+					 text="微信聊天文件"
+					 icon="cloud-upload"
+					 data-key="priceFileIds"
+					 bindtap="chooseMessageFile"
+					/>
+				</t-grid>
+			</view>
+		</t-cell>
+
+		<t-swipe-cell wx:for="{{priceFileIds}}" wx:key="index">
+			<t-cell
+			 title="{{(index+1)+'. '+item}}"
+			 arrow
+			 hover
+			 data-key="priceFileIds"
+			 data-index="{{index}}"
+			 data-id="{{item}}"
+			 bindtap="preview"
+			/>
+			<view
+			 slot="right"
+			 class="btn delete-btn"
+			 data-key="priceFileIds"
+			 data-index="{{index}}"
+			 data-id="{{item}}"
+			 bind:tap="fileDelete"
+			>删除
+			</view>
+		</t-swipe-cell>
+	</view>
+
+	<!-- 采价记录部分 -->
+	<view class="record-section">
+		<t-cell title="采价记录">
+			<view slot="description">
+				<view class="tips">
+					为了保障您的权益和公平公正，需要您上传一些销售凭据以作证您上报的价格，您上传的数据我们将严格保密，不会泄露和另作他用，若因数据泄露造成的问题，我们将承担相应的损失和法律责任。
+				</view>
+				<t-grid class="block" column="{{2}}" wx:if="{{!disabled}}">
+					<t-grid-item
+					 t-class-image="image"
+					 text="凭证拍照"
+					 icon="camera"
+					 data-type="camera"
+					 data-key="collectFileIds"
+					 bindtap="chooseMedia"
+					/>
+					<t-grid-item
+					 t-class-image="image"
+					 text="手机上传凭证"
+					 icon="folder-move"
+					 data-type="album"
+					 data-key="collectFileIds"
+					 bindtap="chooseMedia"
+					/>
+				</t-grid>
+			</view>
+		</t-cell>
+
+		<t-swipe-cell wx:for="{{collectFileIds}}" wx:key="index">
+			<t-cell
+			 title="{{(index+1)+'. '+item}}"
+			 arrow
+			 hover
+			 data-key="collectFileIds"
+			 data-index="{{index}}"
+			 data-id="{{item}}"
+			 bindtap="preview"
+			/>
+			<view
+			 slot="right"
+			 class="btn delete-btn"
+			 data-key="collectFileIds"
+			 data-index="{{index}}"
+			 data-id="{{item}}"
+			 bind:tap="fileDelete"
+			>删除
+			</view>
+		</t-swipe-cell>
+	</view>
+
+	<!-- 额外的底部间距 -->
+	<view style="height: 120rpx;" />
 </scroll-view>
 
 <!-- 选择器 -->
-<t-picker visible="{{pickerVisible}}" value="{{pickerValue}}" title="{{pickerTitle}}" 
-        cancelBtn="取消" confirmBtn="确认" usingCustomNavbar
-        bindconfirm="onPickerConfirm" bindcancel="onPickerCancel">
-  <t-picker-item options="{{pickerOptions}}"></t-picker-item>
+<t-picker
+ visible="{{pickerVisible}}"
+ value="{{pickerValue}}"
+ title="{{pickerTitle}}"
+ cancelBtn="取消"
+ confirmBtn="确认"
+ usingCustomNavbar
+ bindconfirm="onPickerConfirm"
+ bindcancel="onPickerCancel"
+>
+	<t-picker-item options="{{pickerOptions}}" />
 </t-picker>
 
 <!-- 固定在底部的操作按钮 -->
 <view class="operation" wx:if="{{!disabled}}">
-  <view class="operation-btn-box">
-    <t-button class="operation-btn" theme="primary" loading="{{stagingLoading}}" bind:tap="staging">暂存数据</t-button>
-  </view>
-  <view class="operation-btn-box">
-    <t-button class="operation-btn" theme="primary" loading="{{submitLoading}}" bind:tap="submit">提交数据</t-button>
-  </view>
+	<view class="operation-btn-box">
+		<t-button
+		 class="operation-btn"
+		 theme="primary"
+		 loading="{{stagingLoading}}"
+		 bind:tap="staging"
+		>暂存数据
+		</t-button>
+	</view>
+	<view class="operation-btn-box">
+		<t-button
+		 class="operation-btn"
+		 theme="primary"
+		 loading="{{submitLoading}}"
+		 bind:tap="submit"
+		>提交数据
+		</t-button>
+	</view>
 </view>
 
 <t-toast id="t-toast" />
+
