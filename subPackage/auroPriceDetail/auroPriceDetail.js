@@ -11,7 +11,10 @@ import {
   selectButtomVarieties,
   selectStallFruiveggies,
   selectStallLinkers,
-  selectVarietySpecss
+  selectVarietySpecss,
+  ownerSelectCategories,
+  ownerRemoveCollectCategory,
+  marketAddCollectCategory
 } from "../../utils/api";
 import {
   Toast
@@ -223,33 +226,55 @@ Page({
       }
     }
     selectStallFruiveggies(params).then((res) => {
-      // 获取原始categories
-      let originalCategories = [];
-      if (this.data.pricingDetail.varietyId) {
-        originalCategories = res.filter(v => v.varietyId === this.data.pricingDetail.varietyId)[0]?.categories || [];
-      }
-
-      // 为categories添加inputStatus
-      // 注意：实际项目中应从API获取状态
-      // TODO: 替换为API数据
-      const categoriesWithStatus = originalCategories.map(item => {
-        return {
-          ...item,
-          inputStatus: Math.random() > 0.5 ? '1' : '0' // 随机生成状态，实际应用中应从后端获取
-        };
+      this.setData({
+        varieties: res
       });
 
-      this.setData({
-        varieties: res,
-        categories: categoriesWithStatus
-      })
+      // Auto-select the first variety if no variety is already selected
+      if (res.length > 0 && !this.data.pricingDetail.varietyId) {
+        const firstVariety = res[0];
+        this.setData({
+          'pricingDetail.varietyId': firstVariety.varietyId,
+          'pricingDetail.varietyName': firstVariety.varietyName
+        });
 
-      // 保留此函数中的其他逻辑...
+        // After selecting a variety, fetch its categories
+        this.fetchCategories(firstVariety.varietyId);
+
+        // Call setPickerData to get the specs for this variety
+        this.setPickerData(firstVariety.varietyId, true);
+      } else if (this.data.pricingDetail.varietyId) {
+        // If a variety is already selected, fetch its categories
+        this.fetchCategories(this.data.pricingDetail.varietyId);
+      }
     }).finally(() => {
       this.setData({
         refresherTriggered: false
-      })
-    })
+      });
+    });
+  },
+  fetchCategories(varietyId) {
+    if (!varietyId) return;
+
+    const params = {
+      "condition": {
+        "collectPriceId": this.data.busiId,
+        "varietyId": varietyId
+      }
+    };
+
+    ownerSelectCategories(params).then((res) => {
+      // Just store the original data, keeping collectStatus 
+      this.setData({
+        categories: res.map(item => ({
+          ...item,
+          collectCategoryId: item.collectCategoryId
+        }))
+      });
+    }).catch(err => {
+      console.error('Error fetching categories:', err);
+      this.toast('获取品种小类失败', 'error');
+    });
   },
   selectPriceType() {
     if (this.data.disabled) {
@@ -553,38 +578,28 @@ Page({
       return
     }
     const key = e.target.dataset.key
+    const varietyId = e.currentTarget.dataset.varietyid;
+
     this.setData({
       pickerKay: key,
-      "pricingDetail.varietyId": e.currentTarget.dataset.varietyid,
+      "pricingDetail.varietyId": varietyId,
       "pricingDetail.varietyName": e.currentTarget.dataset.varietyname,
     })
 
-    // 获取对应的分类列表
-    const varietyId = e.currentTarget.dataset.varietyid;
-    const categoriesData = this.data.varieties.filter(v => v.varietyId === varietyId)[0]?.categories || [];
+    // Instead of getting categories from local data, fetch them from API
+    this.fetchCategories(varietyId);
 
-    // 给每个分类添加inputStatus字段
-    // 注意：实际项目中应从API获取状态
-    // TODO: 替换为API数据
-    const categoriesWithInputStatus = categoriesData.map(item => {
-      return {
-        ...item,
-        inputStatus: Math.random() > 0.5 ? '1' : '0' // 随机生成状态，实际应用中应从后端获取
-      };
-    });
-
-    this.setData({
-      "categories": categoriesWithInputStatus
-    });
-
-    this.setPickerData(e.currentTarget.dataset.varietyid, true);
+    // We still need to call setPickerData to get the specs for this variety
+    this.setPickerData(varietyId, true);
   },
 
   setPickerData(key, flag) {
     if (this.data.pickerKay === 'varietyId') {
+      // Get specs data - we'll keep using selectVarietySpecss for this
       const params = {
         primaryKey: key
       }
+
       selectVarietySpecss(params).then((res) => {
         this.setData({
           specssList: res
@@ -607,7 +622,6 @@ Page({
         }
       })
     }
-
   },
   tagcategoryClick(e) {
     if (this.data.disabled) {
@@ -630,23 +644,26 @@ Page({
     this.setData({
       pickerKay: key,
     })
-    const categories = this.data.varieties.find(item => item.varietyId === this.data.pricingDetail.varietyId)?.categories
-    if (!categories) {
-      this.toast('该品种暂无品种小类', 'warning')
-      return;
+
+    // Check if categories are already loaded
+    if (this.data.categories && this.data.categories.length > 0) {
+      // Use existing categories for the picker
+      this.setData({
+        pickerOptions: this.data.categories.map(item => {
+          return {
+            label: item.categoryName,
+            value: item.categoryId,
+          }
+        }),
+        pickerValue: this.data.pricingDetail.categoryId,
+        pickerTitle: key === 'varietyId' ? '品种大类' : '品种小类',
+        pickerVisible: true,
+      })
+    } else {
+      // Fetch categories if not available
+      this.fetchCategories(this.data.pricingDetail.varietyId);
+      this.toast('正在加载品种小类', 'loading');
     }
-    this.setData({
-      pickerOptions: categories.map(item => {
-        return {
-          label: item.categoryName,
-          value: item.categoryId,
-        }
-      }),
-      categories: categories,
-      pickerValue: this.data.pricingDetail.categoryId,
-      pickerTitle: key === 'varietyId' ? '品种大类' : '品种小类',
-      pickerVisible: true,
-    })
   },
   pricingTypeFn(e) {
     if (this.data.disabled) {
@@ -1070,25 +1087,46 @@ Page({
       return;
     }
 
-    // 从品种大类数据中获取所有小类
-    const allCategories = this.data.varieties.find(v => v.varietyId === currentVarietyId)?.categories || [];
+    // 显示加载中提示
+    // this.toast('加载中...', 'loading');
 
-    // 当前已显示的小类ID列表
-    const currentCategoryIds = this.data.categories.map(item => item.categoryId);
+    // 获取当前品种大类下的所有可能小类
+    const currentVariety = this.data.varieties.find(v => v.varietyId === currentVarietyId);
+    const allCategories = currentVariety ? currentVariety.categories || [] : [];
 
-    // 标记可用和不可用的小类
-    const availableCategories = allCategories.map(item => {
-      return {
-        ...item,
-        available: !currentCategoryIds.includes(item.categoryId)
-      };
-    });
+    // 获取当前已添加的小类
+    const params = {
+      "condition": {
+        "collectPriceId": this.data.busiId,
+        "varietyId": currentVarietyId
+      }
+    };
 
-    this.setData({
-      allCategories: allCategories,
-      availableCategories: availableCategories,
-      selectedCategories: [], // 重置选择
-      showCategoryDialog: true
+    ownerSelectCategories(params).then((existingCategories) => {
+      // 获取已添加小类的ID列表
+      const addedCategoryIds = existingCategories.map(item => item.categoryId);
+
+      // 标记可用和不可用的小类
+      const availableCategories = allCategories.map(item => {
+        return {
+          ...item,
+          available: !addedCategoryIds.includes(item.categoryId),
+          selected: false // 初始未选中
+        };
+      });
+
+      this.setData({
+        allCategories: allCategories,
+        availableCategories: availableCategories.filter(item => item.available), // 只显示可用的
+        selectedCategories: [], // 重置选择
+        showCategoryDialog: true
+      });
+
+      // 隐藏加载提示
+      wx.hideLoading();
+    }).catch(err => {
+      console.error('获取已添加小类失败:', err);
+      this.toast('获取小类数据失败', 'error');
     });
   },
 
@@ -1111,6 +1149,7 @@ Page({
   // 确认添加品种小类
   confirmAddCategory() {
     const selectedIds = this.data.selectedCategories;
+    const currentVarietyId = this.data.pricingDetail.varietyId;
 
     if (selectedIds.length === 0) {
       this.toast('请至少选择一个品种小类', 'warning');
@@ -1119,62 +1158,86 @@ Page({
 
     console.log('确认添加品种小类：', selectedIds);
 
-    // 从全部小类中找出选中的小类
-    const selectedCategories = this.data.allCategories.filter(item =>
-      selectedIds.includes(item.categoryId)
-    );
-
-    // 这里应该调用API添加小类，然后更新表格数据
-    // 模拟API调用后的结果，实际项目中替换为真实API调用
-
-    // 准备添加的新小类（添加随机状态）
-    // 注意：实际项目中应从API获取状态，下面的代码仅用于演示
-    const newCategories = selectedCategories.map(item => {
+    // 构建请求参数
+    const items = selectedIds.map(categoryId => {
       return {
-        ...item,
-        inputStatus: '0' // 新添加的默认为未完成状态
+        categoryId: categoryId,
+        varietyId: currentVarietyId // 使用当前选中的品种大类ID
       };
     });
 
-    // 合并到现有小类中
-    const updatedCategories = [...this.data.categories, ...newCategories];
+    const params = {
+      "condition": {
+        "fruitMarketId": this.data.busiId,
+        "items": items
+      }
+    };
 
-    this.setData({
-      categories: updatedCategories,
-      showCategoryDialog: false,
-      selectedCategories: []
+    // 显示加载提示
+    // this.toast('添加中...', 'loading');
+
+    // 调用添加API
+    marketAddCollectCategory(params).then(() => {
+      this.toast('添加成功', 'success');
+
+      // 关闭对话框
+      this.setData({
+        showCategoryDialog: false,
+        selectedCategories: []
+      });
+
+      // 刷新小类列表
+      this.fetchCategories(currentVarietyId);
+    }).catch(err => {
+      console.error('添加小类失败:', err);
+      this.toast('添加失败', 'error');
     });
-
-    this.toast('添加成功', 'success');
-
-    // 注释：实际项目中，应该在此处调用API获取最新的小类数据
-    // 包括真实的录入状态，而不是使用随机或固定值
+  },
+  onCheckboxChange(e) {
+    this.setData({
+      selectedCategories: e.detail.value
+    });
   },
 
   // 删除品种小类
   deleteCategory(e) {
     const categoryId = e.currentTarget.dataset.id;
-    console.log('删除品种小类', categoryId);
+    const collectCategoryId = e.currentTarget.dataset.collectcategoryid;
+    const varietyId = this.data.pricingDetail.varietyId;
 
-    // 实际项目中，此处应调用删除API
+    console.log('删除品种小类', collectCategoryId);
 
-    // 从现有列表中移除
-    const newCategories = this.data.categories.filter(item => item.categoryId !== categoryId);
-    this.setData({
-      categories: newCategories
+    // Show loading toast
+    this.toast('正在删除...', 'loading');
+
+    // Call the API to delete the category
+    const params = {
+      "condition": {
+        "primaryKey": collectCategoryId
+      }
+    };
+
+    ownerRemoveCollectCategory(params).then((res) => {
+      this.toast('删除成功', 'success');
+
+      // Refresh the categories list after successful deletion
+      this.fetchCategories(varietyId);
+    }).catch(err => {
+      console.error('Error deleting category:', err);
+      this.toast('删除失败', 'error');
     });
-
-    this.toast('删除成功', 'success');
   },
 
   // 处理点击品种小类
+  // For the handleCategoryClick function, include collectCategoryId when navigating to categoryDetail
   handleCategoryClick(e) {
     const categoryId = e.currentTarget.dataset.id;
     const categoryName = e.currentTarget.dataset.name;
+    const collectCategoryId = e.currentTarget.dataset.collectcategoryid;
 
-    // 跳转到新页面
+    // Navigate to categoryDetail with all required parameters
     wx.navigateTo({
-      url: `/subPackage/categoryDetail/categoryDetail?categoryId=${categoryId}&categoryName=${categoryName}&varietyId=${this.data.pricingDetail.varietyId}&varietyName=${this.data.pricingDetail.varietyName}&stallId=${this.data.pricingDetail.stallId}`
+      url: `/subPackage/categoryDetail/categoryDetail?categoryId=${categoryId}&categoryName=${categoryName}&varietyId=${this.data.pricingDetail.varietyId}&varietyName=${this.data.pricingDetail.varietyName}&stallId=${this.data.pricingDetail.stallId}&collectCategoryId=${collectCategoryId}`
     });
-  },
+  }
 })

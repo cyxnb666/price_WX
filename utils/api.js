@@ -265,3 +265,23 @@ export const ownerselectICollectPriceTasks = (data) => instance.post('/owner/sel
  * @returns Promise
  */
 export const addStallLinker = (data) => instance.post('/stall/addStallLinker', data)
+
+
+/**
+ * @description 查询品种小类
+ * @param {Object} data
+ * @returns Promise
+ */
+export const ownerSelectCategories = (data) => instance.post('/owner/selectCategories', data)
+/**
+ * @description 删除采价小类
+ * @param {Object} data
+ * @returns Promise
+ */
+export const ownerRemoveCollectCategory = (data) => instance.post('/owner/removeCollectCategory', data)
+/**
+ * @description 添加采价小类
+ * @param {Object} data
+ * @returns Promise
+ */
+export const marketAddCollectCategory = (data) => instance.post('/market/addCollectCategory', data)

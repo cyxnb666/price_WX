@@ -238,3 +238,16 @@ page {
   max-height: 60vh;
   overflow-y: auto;
 }
+
+/* Status colors */
+.status-2 {
+  color: #999999; /* 待采价 - gray */
+}
+
+.status-3 {
+  color: #ff9800; /* 暂存 - orange */
+}
+
+.status-5 {
+  color: #1989FA; /* 已完成 - blue */
+}
