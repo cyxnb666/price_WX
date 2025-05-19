@@ -1,0 +1,67 @@
+/* 修改页面容器样式，给底部按钮留出空间 */
+.category-detail {
+  height: 100%;
+  width: 100%;
+  background-color: #F2F2F2FF;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 固定在底部的操作按钮 */
+.operation {
+  padding: 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  --td-button-primary-bg-color: #1989FA !important;
+  --td-button-primary-border-color: #1989FA !important;
+  --td-button-primary-outline-border-color: #1989FA !important;
+  --td-button-primary-outline-color: #1989FA !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 100;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);  /* 添加阴影效果，增强视觉分离 */
+}
+
+.operation-btn-box {
+  width: calc(50% - 20rpx);
+}
+
+.operation-btn {
+  width: 100%;
+}
+
+.evidence-section, .record-section {
+  background-color: #ffffff;
+  margin-top: 20rpx;
+  border-radius: 8rpx;
+  margin-bottom: 30rpx;
+}
+
+.tips {
+  color: #E26F11;
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 40rpx;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e34d59;
+}
+
+/* 调整价格输入面板与文件上传区域的间距 */
+.price-input-panel {
+  margin-bottom: 20rpx;
+}

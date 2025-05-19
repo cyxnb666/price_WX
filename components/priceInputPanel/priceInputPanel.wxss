@@ -1,0 +1,98 @@
+.price-input-panel {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.checkbox-area {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  margin-right: 40rpx;
+}
+
+.price-section {
+  margin-bottom: 30rpx;
+  border: 1px solid #eaeaea;
+  border-radius: 8rpx;
+  padding: 15rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.table-header-item {
+  color: #E7A927;
+  font-size: 24rpx;
+  flex: 1;
+  text-align: center;
+}
+
+.table-body {
+  padding: 0 20rpx;
+}
+
+.table-body-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  border-bottom: 1px solid #F5F5F5;
+  padding-bottom: 12rpx;
+}
+
+.table-body-item-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.font14 {
+  font-size: 24rpx;
+  color: #333;
+}
+
+.bulk-input {
+  padding: 20rpx;
+}
+
+.bulk-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.bulk-label {
+  width: 100rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.bulk-value {
+  flex: 1;
+  border-bottom: 1px solid #eaeaea;
+  padding: 10rpx 0;
+  font-size: 28rpx;
+  color: #333;
+}

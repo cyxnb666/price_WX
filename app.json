@@ -26,7 +26,8 @@
         "salePlan/sall/PriceReport/PriceReport",
         "salePlan/sall/autominprice/autominprice",
         "autopriceReport/autopriceReport",
-        "auroPriceDetail/auroPriceDetail"
+        "auroPriceDetail/auroPriceDetail",
+        "categoryDetail/categoryDetail"
       ]
     }
   ],

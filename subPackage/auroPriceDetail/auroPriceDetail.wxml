@@ -9,6 +9,7 @@ loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']
     <t-cell title="当前位置" description="{{pricingDetail.collectAddress || '点击获取'}}" right-icon="location" hover bind:click="getLocation" />
     <date-picker title="价格日期" wx:if="{{!disabled}}" start="{{today}}" date="{{pricingDetail.collectDate}}" bind:datechange="onDateChange" />
     <t-cell title="价格日期" wx:if="{{disabled}}"  note="{{pricingDetail.collectDate}}" />
+<t-cell title="价格类型" note="{{priceTypes[pricingDetail.priceType] || '请选择'}}" arrow hover data-key="priceType" bind:click="selectPriceType" />
     <t-cell title="品种大类">
       <view slot="description">
         <t-check-tag wx:for="{{varieties}}" wx:key="index" class="margin-16" bind:click="tagClick" data-varietyId="{{item.varietyId}}" data-key="varietyId" data-varietyName="{{item.varietyName}}" checked="{{pricingDetail.varietyId === item.varietyId}}" size="large" variant="dark" content="{{ item.varietyName }}" />
