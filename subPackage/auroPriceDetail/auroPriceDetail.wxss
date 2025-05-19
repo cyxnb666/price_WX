@@ -5,10 +5,12 @@ page {
   --td-cell-title-color: #42AEFA !important;
   --td-cell-note-color: #333333 !important;
 }
-.table-body-item-box{
+
+.table-body-item-box {
   display: flex;
   align-items: center;
 }
+
 .pricingDetail {
   height: calc(100vh - 190px) !important;
   width: 100%;
@@ -20,9 +22,11 @@ page {
 .pricingDetail-container {
   background-color: #ffffff;
 }
-.margin-16{
+
+.margin-16 {
   margin: 16rpx;
 }
+
 .operation {
   padding: 40rpx;
   box-sizing: border-box;
@@ -53,57 +57,74 @@ page {
   justify-content: center;
   align-items: center;
   padding: 20rpx 0;
-  
+
 }
 
-.fruitDiameter, .weight {
+.fruitDiameter,
+.weight {
   width: 40%;
   border: 1px solid #E5E5E5;
   text-align: center;
   padding: 10rpx 0;
 }
-.fruitDiameter{
-  border-top-left-radius: 40rpx; /* 高度的一半 */
-  border-bottom-left-radius: 40rpx; /* 高度的一半 */
+
+.fruitDiameter {
+  border-top-left-radius: 40rpx;
+  /* 高度的一半 */
+  border-bottom-left-radius: 40rpx;
+  /* 高度的一半 */
 }
-.weight{
-  border-top-right-radius: 40rpx; /* 高度的一半 */
-  border-bottom-right-radius: 40rpx; /* 高度的一半 */
+
+.weight {
+  border-top-right-radius: 40rpx;
+  /* 高度的一半 */
+  border-bottom-right-radius: 40rpx;
+  /* 高度的一半 */
 }
-.active-fruitDiameter{
+
+.active-fruitDiameter {
   width: 40%;
   border: 1px solid #1989FA;
   text-align: center;
   padding: 10rpx 0;
   background-color: #1989FA;
   color: #ffffff;
-  border-top-left-radius: 40rpx; /* 高度的一半 */
-  border-bottom-left-radius: 40rpx; /* 高度的一半 */
+  border-top-left-radius: 40rpx;
+  /* 高度的一半 */
+  border-bottom-left-radius: 40rpx;
+  /* 高度的一半 */
 }
-.active-weight{
+
+.active-weight {
   width: 40%;
   border: 1px solid #1989FA;
   text-align: center;
   padding: 10rpx 0;
   background-color: #1989FA;
   color: #ffffff;
-  border-top-right-radius: 40rpx; /* 高度的一半 */
-  border-bottom-right-radius: 40rpx; /* 高度的一半 */
+  border-top-right-radius: 40rpx;
+  /* 高度的一半 */
+  border-bottom-right-radius: 40rpx;
+  /* 高度的一半 */
 }
-.table-header{
+
+.table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 30rpx;
   margin-bottom: 20rpx;
 }
-.table-body{
+
+.table-body {
   padding: 0 30rpx;
 }
-.table-header-item{
+
+.table-header-item {
   color: #E7A927;
 }
-.table-body-item{
+
+.table-body-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,10 +132,12 @@ page {
   border-bottom: 1px solid #F5F5F5;
   padding-bottom: 12rpx;
 }
-.tips{
+
+.tips {
   color: #E26F11;
   margin-bottom: 20rpx;
 }
+
 .btn {
   display: inline-flex;
   justify-content: center;
@@ -126,4 +149,92 @@ page {
 
 .delete-btn {
   background-color: #e34d59;
+}
+
+
+/* 品种小类表格样式 */
+.category-table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-top: 10rpx;
+}
+
+.category-header {
+  display: flex;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+.category-row {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+.category-row:last-child {
+  border-bottom: none;
+}
+
+.category-column {
+  flex: 1;
+  padding: 20rpx;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-text {
+  cursor: pointer;
+}
+
+.status-completed {
+  color: #1989FA;
+}
+
+.status-incomplete {
+  color: #999999;
+}
+
+/* 对话框样式 */
+.dialog-content {
+  padding: 20rpx;
+}
+
+.dialog-message {
+  text-align: center;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+/* 品种小类标题与图标的样式 */
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  color: #42AEFA;
+  /* 使用与其他标题相同的颜色 */
+}
+
+.title-with-icon text {
+  margin-right: 10rpx;
+}
+
+/* 对话框中品种小类选项样式 */
+.category-option {
+  padding: 10rpx 0;
+}
+
+.no-category-tip {
+  text-align: center;
+  color: #999;
+  padding: 20rpx 0;
+}
+
+.dialog-content {
+  padding: 20rpx;
+  max-height: 60vh;
+  overflow-y: auto;
 }

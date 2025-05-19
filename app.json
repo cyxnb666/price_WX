@@ -50,6 +50,7 @@
     "t-toast": "tdesign-miniprogram/toast/toast",
     "t-drawer": "tdesign-miniprogram/drawer/drawer",
     "t-search": "tdesign-miniprogram/search/search",
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
     "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group",
     "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker",
     "t-navbar": "tdesign-miniprogram/navbar/navbar",

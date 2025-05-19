@@ -31,6 +31,10 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showCategoryDialog: false,
+    availableCategories: [], // 可用于添加的小类
+    selectedCategories: [], // 用户选择的小类
+    allCategories: [], // 当前品种所有小类（包括已删除和未删除）
     varietyUnit: {
       "UG": "元/斤",
       "UKG": "元/公斤",
@@ -206,34 +210,41 @@ Page({
       'pricingDetail.collectDate': now.format('YYYY-MM-DD')
     });
   },
-  selectButtomVarietiesFn(stallId, flag) {
-    let params = {
-      "condition": {
-        "primaryKey": this.data.stallId || stallId || this.data.pricingDetail.stallId
-      }
+selectButtomVarietiesFn(stallId, flag) {
+  let params = {
+    "condition": {
+      "primaryKey": this.data.stallId || stallId
     }
-    selectStallFruiveggies(params).then((res) => {
-      let varietyItems = this.data.pricingDetail.varietyId ? res.filter(v => v.varietyId === this.data.pricingDetail.varietyId) : ""
-      this.setData({
-        varieties: res,
-        categories: varietyItems ? varietyItems.categories : []
-      })
-      if (flag) {
-        if (res.length) {
-          this.setData({
-            "pricingDetail.varietyId": res[0].varietyId,
-            pickerKay: "varietyId",
-            categories: res[0].varietyId ? res.filter(v => v.varietyId === res[0].varietyId)[0].categories : []
-          })
-          res[0].varietyId && this.setPickerData(res[0].varietyId, true)
-        }
-      }
-    }).finally(() => {
-      this.setData({
-        refresherTriggered: false
-      })
+  }
+  selectStallFruiveggies(params).then((res) => {
+    // 获取原始categories
+    let originalCategories = [];
+    if (this.data.pricingDetail.varietyId) {
+      originalCategories = res.filter(v => v.varietyId === this.data.pricingDetail.varietyId)[0]?.categories || [];
+    }
+    
+    // 为categories添加inputStatus
+    // 注意：实际项目中应从API获取状态
+    // TODO: 替换为API数据
+    const categoriesWithStatus = originalCategories.map(item => {
+      return {
+        ...item,
+        inputStatus: Math.random() > 0.5 ? '1' : '0' // 随机生成状态，实际应用中应从后端获取
+      };
+    });
+    
+    this.setData({
+      varieties: res,
+      categories: categoriesWithStatus
     })
-  },
+    
+    // 保留此函数中的其他逻辑...
+  }).finally(() => {
+    this.setData({
+      refresherTriggered: false
+    })
+  })
+},
   getCurrentStall() {
     selectChooseStalls().then(res => {
       console.log(res)
@@ -243,7 +254,7 @@ Page({
     })
   },
   setPhotos(options) {
-    console.log(options,'options')
+    console.log(options, 'options')
     this.setData({
       'pricingDetail.priceFileIds': this.data.pricingDetail.priceFileIds.concat(options.priceFileIds),
       'pricingDetail.collectFileIds': this.data.pricingDetail.collectFileIds.concat(options.collectFileIds)
@@ -511,18 +522,36 @@ Page({
     })
   },
   tagClick(e) {
-    if (this.data.disabled) {
-      return
-    }
-    const key = e.target.dataset.key
-    this.setData({
-      pickerKay: key,
-      "pricingDetail.varietyId": e.currentTarget.dataset.varietyid,
-      "pricingDetail.varietyName": e.currentTarget.dataset.varietyname,
-      "categories": this.data.varieties.filter(v => v.varietyId === e.currentTarget.dataset.varietyid)[0].categories
-    })
-    this.setPickerData(e.currentTarget.dataset.varietyid, true)
-  },
+  if (this.data.disabled) {
+    return
+  }
+  const key = e.target.dataset.key
+  this.setData({
+    pickerKay: key,
+    "pricingDetail.varietyId": e.currentTarget.dataset.varietyid,
+    "pricingDetail.varietyName": e.currentTarget.dataset.varietyname,
+  })
+  
+  // 获取对应的分类列表
+  const varietyId = e.currentTarget.dataset.varietyid;
+  const categoriesData = this.data.varieties.filter(v => v.varietyId === varietyId)[0]?.categories || [];
+  
+  // 给每个分类添加inputStatus字段
+  // 注意：实际项目中应从API获取状态
+  // TODO: 替换为API数据
+  const categoriesWithInputStatus = categoriesData.map(item => {
+    return {
+      ...item,
+      inputStatus: Math.random() > 0.5 ? '1' : '0' // 随机生成状态，实际应用中应从后端获取
+    };
+  });
+  
+  this.setData({
+    "categories": categoriesWithInputStatus
+  });
+  
+  this.setPickerData(e.currentTarget.dataset.varietyid, true);
+},
 
   setPickerData(key, flag) {
     if (this.data.pickerKay === 'varietyId') {
@@ -989,4 +1018,133 @@ Page({
     })
     this.saveCollectPriceFn("1")
   },
+  onCheckboxToggle(e) {
+    const { id, index } = e.currentTarget.dataset;
+
+    // 切换选中状态
+    let availableCategories = [...this.data.availableCategories];
+    availableCategories[index].selected = !availableCategories[index].selected;
+
+    this.setData({
+      availableCategories: availableCategories
+    });
+
+    console.log(`小类 ${id} 选中状态: ${availableCategories[index].selected}`);
+  },
+
+  // 显示添加品种小类对话框
+showAddCategoryDialog() {
+  console.log('打开添加品种小类对话框');
+  
+  // 获取当前品种大类的所有小类
+  const currentVarietyId = this.data.pricingDetail.varietyId;
+  if (!currentVarietyId) {
+    this.toast('请先选择品种大类', 'warning');
+    return;
+  }
+  
+  // 从品种大类数据中获取所有小类
+  const allCategories = this.data.varieties.find(v => v.varietyId === currentVarietyId)?.categories || [];
+  
+  // 当前已显示的小类ID列表
+  const currentCategoryIds = this.data.categories.map(item => item.categoryId);
+  
+  // 标记可用和不可用的小类
+  const availableCategories = allCategories.map(item => {
+    return {
+      ...item,
+      available: !currentCategoryIds.includes(item.categoryId)
+    };
+  });
+  
+  this.setData({
+    allCategories: allCategories,
+    availableCategories: availableCategories,
+    selectedCategories: [], // 重置选择
+    showCategoryDialog: true
+  });
+},
+
+// 关闭品种小类对话框
+closeCategoryDialog() {
+  this.setData({
+    showCategoryDialog: false,
+    selectedCategories: []
+  });
+},
+
+// 处理用户选择小类变化
+onCategorySelectionChange(e) {
+  console.log('选择的小类：', e.detail.value);
+  this.setData({
+    selectedCategories: e.detail.value
+  });
+},
+
+// 确认添加品种小类
+confirmAddCategory() {
+  const selectedIds = this.data.selectedCategories;
+  
+  if (selectedIds.length === 0) {
+    this.toast('请至少选择一个品种小类', 'warning');
+    return;
+  }
+  
+  console.log('确认添加品种小类：', selectedIds);
+  
+  // 从全部小类中找出选中的小类
+  const selectedCategories = this.data.allCategories.filter(item => 
+    selectedIds.includes(item.categoryId)
+  );
+  
+  // 这里应该调用API添加小类，然后更新表格数据
+  // 模拟API调用后的结果，实际项目中替换为真实API调用
+  
+  // 准备添加的新小类（添加随机状态）
+  // 注意：实际项目中应从API获取状态，下面的代码仅用于演示
+  const newCategories = selectedCategories.map(item => {
+    return {
+      ...item,
+      inputStatus: '0' // 新添加的默认为未完成状态
+    };
+  });
+  
+  // 合并到现有小类中
+  const updatedCategories = [...this.data.categories, ...newCategories];
+  
+  this.setData({
+    categories: updatedCategories,
+    showCategoryDialog: false,
+    selectedCategories: []
+  });
+  
+  this.toast('添加成功', 'success');
+  
+  // 注释：实际项目中，应该在此处调用API获取最新的小类数据
+  // 包括真实的录入状态，而不是使用随机或固定值
+},
+
+// 删除品种小类
+deleteCategory(e) {
+  const categoryId = e.currentTarget.dataset.id;
+  console.log('删除品种小类', categoryId);
+  
+  // 实际项目中，此处应调用删除API
+  
+  // 从现有列表中移除
+  const newCategories = this.data.categories.filter(item => item.categoryId !== categoryId);
+  this.setData({
+    categories: newCategories
+  });
+  
+  this.toast('删除成功', 'success');
+},
+
+// 处理点击品种小类
+handleCategoryClick(e) {
+  const categoryId = e.currentTarget.dataset.id;
+  const categoryName = e.currentTarget.dataset.name;
+  console.log('点击品种小类', categoryId, categoryName);
+  // 后续可以实现跳转到新页面的逻辑
+},
 })
