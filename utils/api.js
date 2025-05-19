@@ -284,4 +284,4 @@ export const ownerRemoveCollectCategory = (data) => instance.post('/owner/remove
  * @param {Object} data
  * @returns Promise
  */
-export const marketAddCollectCategory = (data) => instance.post('/market/addCollectCategory', data)
+export const ownerAddCollectCategory = (data) => instance.post('/owner/addCollectCategory', data)

@@ -14,7 +14,7 @@ import {
   selectVarietySpecss,
   ownerSelectCategories,
   ownerRemoveCollectCategory,
-  marketAddCollectCategory
+  ownerAddCollectCategory
 } from "../../utils/api";
 import {
   Toast
@@ -1168,7 +1168,7 @@ Page({
 
     const params = {
       "condition": {
-        "fruitMarketId": this.data.busiId,
+        "collectPriceId": this.data.busiId,
         "items": items
       }
     };
@@ -1176,8 +1176,7 @@ Page({
     // 显示加载提示
     // this.toast('添加中...', 'loading');
 
-    // 调用添加API
-    marketAddCollectCategory(params).then(() => {
+    ownerAddCollectCategory(params).then(() => {
       this.toast('添加成功', 'success');
 
       // 关闭对话框

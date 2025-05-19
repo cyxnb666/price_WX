@@ -3,7 +3,6 @@
  * 用于展示和编辑单个品种小类的价格信息，包括按果径、按重量和统果三种价格类型
  * 同时支持上传价格佐证凭据和采价记录
  */
-
 import {
     queryTypeDicts,         // 查询字典数据API
     selectVarietySpecss,    // 查询规格数据API
@@ -467,36 +466,57 @@ Page({
      * @param {Object} e 事件对象
      */
     preview(e) {
+        console.log(e);
         const id = e.currentTarget.dataset.id;
         const key = e.currentTarget.dataset.key;
         const index = e.currentTarget.dataset.index;
 
-        // 这里仅作为示例，实际项目中应根据文件类型和服务器API进行适当处理
-        // const fs = wx.getFileSystemManager();
-        // 
-        // let params = {
-        //   condition: {
-        //     primaryKey: id,
-        //   },
-        // };
-        // 
-        // filepreview(params).then(res => {
-        //   let filePath = wx.env.USER_DATA_PATH + "/" + id;
-        //   fs.writeFileSync(filePath, res.data, "binary");
-        //   
-        //   wx.previewMedia({
-        //     sources: [{
-        //       url: filePath,
-        //       type: this.isImageVideoUrl(id)
-        //     }]
-        //   });
-        // });
+        const fs = wx.getFileSystemManager();
+        if (['image', 'video'].includes(this.isImageVideoUrl(id))) {
+            let fileIds = this.data[key].filter((v, i) => i === index);
+            const sources = fileIds.map(item => {
+                let params = {
+                    condition: {
+                        primaryKey: item,
+                    },
+                };
+                return filepreview(params);
+            });
 
-        // 简化示例
-        wx.previewImage({
-            urls: [id],
-            current: id
-        });
+            wx.showLoading({
+                title: '加载中',
+            });
+
+            Promise.all(sources).then(list => {
+                const sourcesList = fileIds.map((item, i) => {
+                    let filePath = wx.env.USER_DATA_PATH + "/" + item;
+                    fs.writeFileSync(
+                        filePath,
+                        list[i].data,
+                        "binary" // 二进制流文件必须是binary
+                    );
+                    return {
+                        url: filePath,
+                        type: this.isImageVideoUrl(item)
+                    };
+                });
+
+                wx.hideLoading();
+                wx.previewMedia({
+                    sources: sourcesList,
+                    fail: (err) => {
+                        console.log(err);
+                    }
+                });
+            }).catch(err => {
+                wx.hideLoading();
+                console.error('预览失败:', err);
+                this.toast('预览失败', 'error');
+            });
+        } else {
+            // 对于非图片视频类型的文件，可以使用其他方式打开
+            this.toast('不支持的文件类型', 'warning');
+        }
     },
 
     /**
