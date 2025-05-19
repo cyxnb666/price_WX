@@ -655,10 +655,14 @@ Page({
 
         console.log('保存数据参数:', params);
 
-        // 调用API保存数据
         saveOwnerCollectCategoryPrice(params).then((res) => {
             this.toast('保存成功', 'success');
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2];
 
+            if (prevPage && prevPage.fetchCategories) {
+                prevPage.fetchCategories(this.data.varietyId);
+            }
             // 延迟返回上一页
             setTimeout(() => {
                 wx.navigateBack();
