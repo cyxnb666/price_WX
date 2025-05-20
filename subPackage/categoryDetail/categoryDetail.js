@@ -1,99 +1,85 @@
-/**
- * 品种小类详情页面
- * 用于展示和编辑单个品种小类的价格信息，包括按果径、按重量和统果三种价格类型
- * 同时支持上传价格佐证凭据和采价记录
- */
 import {
-    queryTypeDicts,         // 查询字典数据API
-    selectVarietySpecss,    // 查询规格数据API
-    saveCollectPrice,       // 保存采价数据API
-    filepreview,            // 文件预览API
-    softRemoveFile,          // 文件删除API
+    queryTypeDicts,
+    selectVarietySpecss,
+    saveCollectPrice,
+    filepreview,
+    softRemoveFile,
     saveOwnerCollectCategoryPrice,
     getOwnerCollectCategory
 } from "../../utils/api";
-import { Toast } from "tdesign-miniprogram";  // 提示组件
-import { env } from "../../utils/env";        // 环境配置
+import { Toast } from "tdesign-miniprogram";
+import { env } from "../../utils/env";
 
 Page({
-    /**
-     * 页面的初始数据
-     */
     data: {
         // 基础信息
-        categoryId: '',        // 品种小类ID
-        categoryName: '',      // 品种小类名称
-        varietyId: '',         // 品种大类ID
-        varietyName: '',       // 品种大类名称
-        stallId: '',           // 采价点ID
-        stallName: '',         // 采价点名称
-        collectPriceId: '',    // 采价ID，有值表示更新，无值表示新增
+        categoryId: '',
+        categoryName: '',
+        varietyId: '',
+        varietyName: '',
+        stallId: '',
+        stallName: '',
+        collectPriceId: '',
 
         // 价格数据
-        diameterData: [{       // 按果径价格数据
+        diameterData: [{
             fvSpecsMax: 0,
             fvSpecsMin: 0,
             fvSpecsUnit: "",
-            saleChannelCode: "SCH_JXS", // 默认经销商渠道
+            saleChannelCode: "SCH_JXS",
             specsId: 0,
             specsType: "DIAMETER",
             unitPrice: 0,
             weight: 0,
             varietyUnit: "UG",
         }],
-        weightData: [{         // 按重量价格数据
+        weightData: [{
             fvSpecsMax: 0,
             fvSpecsMin: 0,
             fvSpecsUnit: "",
-            saleChannelCode: "SCH_JXS", // 默认经销商渠道
+            saleChannelCode: "SCH_JXS",
             specsId: 0,
             specsType: "WEIGHT",
             unitPrice: 0,
             weight: 0,
             varietyUnit: "UG",
         }],
-        bulkData: {            // 统果价格数据
-            price: '',           // 价格
-            weight: ''           // 重量
+        bulkData: {
+            price: '',
+            weight: ''
         },
 
         // 凭据文件数据
-        priceFileIds: [],      // 价格佐证凭据文件ID列表
-        collectFileIds: [],    // 采价记录文件ID列表
+        priceFileIds: [],
+        collectFileIds: [],
 
         // 规格和渠道数据
-        channel: [],           // 渠道列表
-        specssList: {},        // 规格列表
+        channel: [],
+        specssList: {},
 
         // 选择器相关数据
-        pickerVisible: false,  // 选择器是否可见
-        pickerValue: null,     // 选择器当前值
-        pickerTitle: '',       // 选择器标题
-        pickerOptions: [],     // 选择器选项
-        pickerKay: '',         // 选择器关键字，用于识别当前选择的是什么字段
-        specssIndex: null,     // 当前操作的规格索引
-        currentSection: '',    // 当前操作的区域（diameter, weight, bulk）
+        pickerVisible: false,
+        pickerValue: null,
+        pickerTitle: '',
+        pickerOptions: [],
+        pickerKay: '',
+        specssIndex: null,
+        currentSection: '',
 
         // 其他控制数据
-        disabled: false,       // 是否禁用编辑
-        stagingLoading: false, // 暂存按钮加载状态
-        submitLoading: false,  // 提交按钮加载状态
-        refresherTriggered: false, // 下拉刷新状态
-        varietyUnit: {         // 单位映射
+        disabled: false,
+        stagingLoading: false,
+        submitLoading: false,
+        refresherTriggered: false,
+        varietyUnit: {
             "UG": "元/斤",
             "UKG": "元/公斤",
         }
     },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
     onLoad(options) {
         console.log('页面加载参数:', options);
-
-        // 获取传递的参数
         this.setData({
-            showDiameter: true, // 默认显示按果径
+            showDiameter: true,
             showWeight: false,
             showBulk: false,
             categoryId: options.categoryId || '',
@@ -102,16 +88,16 @@ Page({
             varietyName: options.varietyName || '',
             stallId: options.stallId || '',
             stallName: options.stallName || '',
-            collectCategoryId: options.collectCategoryId || '', // 添加这行
+            collectCategoryId: options.collectCategoryId || '',
             priceFileIds: [],
             collectFileIds: []
         });
 
         // 初始化数据
-        this.getChannelList();  // 获取渠道列表
+        this.getChannelList();
 
         if (this.data.varietyId) {
-            this.getSpecsList(this.data.varietyId);  // 获取规格列表
+            this.getSpecsList(this.data.varietyId);
         }
 
         // 如果有collectPriceId，表示编辑模式，加载已有数据
@@ -119,10 +105,6 @@ Page({
             this.loadExistingData();
         }
     },
-
-    /**
-     * 获取渠道列表
-     */
     getChannelList() {
         const params = {
             condition: {
@@ -140,11 +122,6 @@ Page({
             this.toast('获取渠道列表失败', 'error');
         });
     },
-
-    /**
-     * 获取规格列表
-     * @param {string} varietyId 品种大类ID
-     */
     getSpecsList(varietyId) {
         if (!varietyId) {
             console.warn('无法获取规格列表: 品种ID为空');
@@ -167,8 +144,6 @@ Page({
     },
     loadExistingData() {
         console.log('加载已有数据，collectCategoryId:', this.data.collectCategoryId);
-
-        // 显示加载提示
         wx.showLoading({
             title: '加载中...'
         });
@@ -274,7 +249,6 @@ Page({
                 priceFileIds: res.priceFileIds || [],
                 collectFileIds: res.collectFileIds || []
             }, () => {
-                // Añadir este log para verificar que los estados se establecen correctamente
                 console.log('设置显示状态:', {
                     showDiameter: this.data.showDiameter,
                     showWeight: this.data.showWeight,
@@ -298,11 +272,6 @@ Page({
             wx.hideLoading();
         });
     },
-
-    /**
-     * 处理组件数据更新事件
-     * 当价格输入面板组件内部数据变化时触发
-     */
     handleUpdate(e) {
         const { type, data } = e.detail;
 
@@ -311,11 +280,6 @@ Page({
         });
         console.log(`${type}数据已更新:`, data);
     },
-
-    /**
-     * 处理组件选择项事件
-     * 当需要在价格输入面板中选择渠道或规格时触发
-     */
     handleSelectItem(e) {
         const { type, section, index } = e.detail;
 
@@ -339,7 +303,6 @@ Page({
                 pickerVisible: true
             });
         } else {
-            // 选择规格
             const specType = section === 'diameter' ? 'diameterSpecsVos' : 'weightSpecsVos';
 
             if (!this.data.specssList[specType] || this.data.specssList[specType].length === 0) {
@@ -369,20 +332,14 @@ Page({
             });
         }
     },
-
-    /**
-     * 处理选择器确认事件
-     */
     onPickerConfirm(e) {
         const section = this.data.currentSection;
         const index = this.data.specssIndex;
         const key = this.data.pickerKay;
         const data = [...this.data[`${section}Data`]];
 
-        // 更新选中的值
         data[index][key] = e.detail.value[0];
 
-        // 如果是规格，还需要更新其他属性
         if (key === 'specsId') {
             const specsType = section === 'diameter' ? 'diameterSpecsVos' : 'weightSpecsVos';
             const specs = this.data.specssList[specsType]
@@ -394,7 +351,6 @@ Page({
                 data[index].fvSpecsUnit = specs.fvSpecsUnit;
                 data[index].varietyUnit = specs.varietyUnit;
 
-                // 添加规格名称显示
                 let specsName = `${specs.fvSpecsMin} ${specs.fvSpecsUnit}-${specs.fvSpecsMax} ${specs.fvSpecsUnit}`;
                 if (specs.fvSpecsMin === null) {
                     specsName = `${specs.fvSpecsMax} ${specs.fvSpecsUnit} 以下`;
@@ -405,7 +361,6 @@ Page({
                 data[index].specsName = specsName;
             }
         } else if (key === 'saleChannelCode') {
-            // 添加渠道名称显示
             const channel = this.data.channel.find(item => item.dictCode === e.detail.value[0]);
             if (channel) {
                 data[index].saleChannelName = channel.dictValue;
@@ -419,21 +374,11 @@ Page({
 
         console.log(`${section}数据已更新:`, data);
     },
-
-    /**
-     * 处理选择器取消事件
-     */
     onPickerCancel() {
         this.setData({
             pickerVisible: false
         });
     },
-
-    /**
-     * 显示消息提示
-     * @param {string} message 提示信息
-     * @param {string} theme 提示类型，可选值：success, warning, error
-     */
     toast(message, theme) {
         Toast({
             context: this,
@@ -444,24 +389,15 @@ Page({
             preventScrollThrough: true,
         });
     },
-
-    /**
-     * 处理组件提示事件
-     */
     handleToast(e) {
         const { message, theme } = e.detail;
         this.toast(message, theme);
     },
-
-    /**
-     * 选择媒体文件（照片/视频）
-     * @param {Object} e 事件对象
-     */
     chooseMedia(e) {
         if (this.data.disabled) return;
 
-        const sourceType = e.currentTarget.dataset.type; // camera 或 album
-        const key = e.currentTarget.dataset.key; // priceFileIds 或 collectFileIds
+        const sourceType = e.currentTarget.dataset.type;
+        const key = e.currentTarget.dataset.key;
         const that = this;
 
         wx.chooseMedia({
@@ -476,15 +412,10 @@ Page({
             }
         });
     },
-
-    /**
-     * 选择微信聊天文件
-     * @param {Object} e 事件对象
-     */
     chooseMessageFile(e) {
         if (this.data.disabled) return;
 
-        const key = e.currentTarget.dataset.key; // priceFileIds 或 collectFileIds
+        const key = e.currentTarget.dataset.key;
         const that = this;
 
         wx.chooseMessageFile({
@@ -497,12 +428,6 @@ Page({
             }
         });
     },
-
-    /**
-     * 上传文件
-     * @param {string} tempFilePath 临时文件路径
-     * @param {string} key 文件类型键，priceFileIds 或 collectFileIds
-     */
     uploadFile(tempFilePath, key) {
         const that = this;
 
@@ -531,11 +456,6 @@ Page({
             }
         });
     },
-
-    /**
-     * 删除文件
-     * @param {Object} e 事件对象
-     */
     fileDelete(e) {
         if (this.data.disabled) return;
 
@@ -563,10 +483,6 @@ Page({
         this.toast('删除成功', 'success');
     },
 
-    /**
-     * 预览文件
-     * @param {Object} e 事件对象
-     */
     preview(e) {
         console.log(e);
         const id = e.currentTarget.dataset.id;
@@ -616,16 +532,9 @@ Page({
                 this.toast('预览失败', 'error');
             });
         } else {
-            // 对于非图片视频类型的文件，可以使用其他方式打开
             this.toast('不支持的文件类型', 'warning');
         }
     },
-
-    /**
-     * 判断文件类型
-     * @param {string} url 文件URL或ID
-     * @returns {string} 文件类型，可能值：image, video, other
-     */
     isImageVideoUrl(url) {
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'];
         const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'flv'];
@@ -638,20 +547,12 @@ Page({
         }
         return 'other';
     },
-
-    /**
-     * 暂存数据
-     */
     staging() {
         this.setData({
             stagingLoading: true
         });
-        this.saveData("0"); // 0表示暂存
+        this.saveData("0");
     },
-
-    /**
-     * 提交数据
-     */
     submit() {
         // 验证数据
         if (!this.validateData()) {
@@ -663,13 +564,7 @@ Page({
         });
         this.saveData("1"); // 1表示提交
     },
-
-    /**
-     * 验证数据
-     * @returns {boolean} 验证结果，true表示验证通过
-     */
     validateData() {
-        // 验证至少选择了一种类型
         if (!this.hasValidData()) {
             this.toast('请至少填写一种价格类型的数据', 'warning');
             return false;
@@ -677,11 +572,6 @@ Page({
 
         return true;
     },
-
-    /**
-     * 检查是否有有效数据
-     * @returns {boolean} 是否有有效数据
-     */
     hasValidData() {
         // 检查按果径数据
         const hasDiameterData = this.data.showDiameter && this.data.diameterData.some(item =>
@@ -696,21 +586,12 @@ Page({
 
         return hasDiameterData || hasWeightData || hasBulkData;
     },
-
-    /**
-     * 保存数据
-     * @param {string} submitType 提交类型，0表示暂存，1表示提交
-     */
     saveData(submitType) {
-        // 构建规格数据数组
         let specss = [];
 
-        // 只加入已勾选的规格类型数据
         if (this.data.showDiameter) {
-            // 过滤有效的按果径数据
             const validDiameterData = this.filterValidData(this.data.diameterData);
             if (validDiameterData.length > 0) {
-                // 添加规格类型
                 validDiameterData.forEach(item => {
                     item.specsType = "DIAMETER";
                 });
@@ -719,10 +600,8 @@ Page({
         }
 
         if (this.data.showWeight) {
-            // 过滤有效的按重量数据
             const validWeightData = this.filterValidData(this.data.weightData);
             if (validWeightData.length > 0) {
-                // 添加规格类型
                 validWeightData.forEach(item => {
                     item.specsType = "WEIGHT";
                 });
@@ -731,7 +610,6 @@ Page({
         }
 
         if (this.data.showBulk && this.data.bulkData.price && this.data.bulkData.weight) {
-            // 添加统果数据
             specss.push({
                 specsType: "WHOLE",
                 unitPrice: this.data.bulkData.price,
@@ -739,7 +617,6 @@ Page({
             });
         }
 
-        // 构建保存参数
         const params = {
             condition: {
                 collectCategoryId: this.data.collectCategoryId,

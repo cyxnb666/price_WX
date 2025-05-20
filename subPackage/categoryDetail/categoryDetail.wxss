@@ -1,4 +1,3 @@
-/* 修改页面容器样式，给底部按钮留出空间 */
 .category-detail {
   height: 100%;
   width: 100%;
@@ -7,7 +6,6 @@
   box-sizing: border-box;
 }
 
-/* 固定在底部的操作按钮 */
 .operation {
   padding: 40rpx;
   box-sizing: border-box;
@@ -23,7 +21,7 @@
   right: 0;
   background-color: #ffffff;
   z-index: 100;
-  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);  /* 添加阴影效果，增强视觉分离 */
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
 .operation-btn-box {
@@ -61,7 +59,6 @@
   background-color: #e34d59;
 }
 
-/* 调整价格输入面板与文件上传区域的间距 */
 .price-input-panel {
   margin-bottom: 20rpx;
 }

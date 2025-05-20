@@ -151,8 +151,6 @@ page {
   background-color: #e34d59;
 }
 
-
-/* 品种小类表格样式 */
 .category-table {
   width: 100%;
   border: 1px solid #eee;
@@ -198,7 +196,6 @@ page {
   color: #999999;
 }
 
-/* 对话框样式 */
 .dialog-content {
   padding: 20rpx;
 }
@@ -210,19 +207,16 @@ page {
   margin-bottom: 20rpx;
 }
 
-/* 品种小类标题与图标的样式 */
 .title-with-icon {
   display: flex;
   align-items: center;
   color: #42AEFA;
-  /* 使用与其他标题相同的颜色 */
 }
 
 .title-with-icon text {
   margin-right: 10rpx;
 }
 
-/* 对话框中品种小类选项样式 */
 .category-option {
   padding: 10rpx 0;
 }

@@ -103,30 +103,29 @@
 				<t-empty wx:else description="该品种大类下暂无小类" />
 			</view>
 		</t-cell>
-<!-- 添加品种小类的对话框 -->
-<t-dialog
-  visible="{{showCategoryDialog}}"
-  title="添加品种小类"
-  confirm-btn="确定"
-  cancel-btn="取消"
-  bind:confirm="confirmAddCategory"
-  bind:cancel="closeCategoryDialog"
->
-  <view class="dialog-content" slot="content">
-    <view class="dialog-message">请选择要添加的品种小类</view>
+		<t-dialog
+		 visible="{{showCategoryDialog}}"
+		 title="添加品种小类"
+		 confirm-btn="确定"
+		 cancel-btn="取消"
+		 bind:confirm="confirmAddCategory"
+		 bind:cancel="closeCategoryDialog"
+		>
+			<view class="dialog-content" slot="content">
+				<view class="dialog-message">请选择要添加的品种小类</view>
 
-    <!-- 可选小类列表 -->
-    <t-checkbox-group value="{{selectedCategories}}" bind:change="onCheckboxChange">
-      <view class="category-option" wx:for="{{availableCategories}}" wx:key="categoryId">
-        <t-checkbox value="{{item.categoryId}}" label="{{item.categoryName}}" />
-      </view>
-    </t-checkbox-group>
+				<!-- 可选小类列表 -->
+				<t-checkbox-group value="{{selectedCategories}}" bind:change="onCheckboxChange">
+					<view class="category-option" wx:for="{{availableCategories}}" wx:key="categoryId">
+						<t-checkbox value="{{item.categoryId}}" label="{{item.categoryName}}" />
+					</view>
+				</t-checkbox-group>
 
-    <view class="no-category-tip" wx:if="{{availableCategories.length === 0}}">
-      暂无可添加的品种小类
-    </view>
-  </view>
-</t-dialog>
+				<view class="no-category-tip" wx:if="{{availableCategories.length === 0}}">
+					暂无可添加的品种小类
+				</view>
+			</view>
+		</t-dialog>
 		<!-- <t-cell title="协助采价员联系人" note="{{pricingDetail.linkerName || '请选择'}}" arrow hover data-key="linkerName" bind:click="getLinkerName" />
     <t-cell title="协助采价员联系人电话" note="{{pricingDetail.linkerMobile}}" /> -->
 		<!-- <view class="pricingType">

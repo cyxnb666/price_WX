@@ -1,165 +1,255 @@
 <view class="price-input-panel">
-  <!-- 复选框区域 -->
-  <view class="checkbox-area">
-    <view class="checkbox-item">
-      <checkbox checked="{{showDiameter}}" bindtap="toggleSection" data-section="Diameter" />
-      <text>按果径</text>
-    </view>
-    <view class="checkbox-item">
-      <checkbox checked="{{showWeight}}" bindtap="toggleSection" data-section="Weight" />
-      <text>按重量</text>
-    </view>
-    <view class="checkbox-item">
-      <checkbox checked="{{showBulk}}" bindtap="toggleSection" data-section="Bulk" />
-      <text>统果</text>
-    </view>
-  </view>
-  
-  <!-- 按果径区域 -->
-  <view class="price-section" wx:if="{{showDiameter}}">
-    <view class="section-title">按果径</view>
-    
-    <view class="table-header">
-      <view class="table-header-item">渠道</view>
-      <view class="table-header-item">规格</view>
-      <view class="table-header-item">价格</view>
-      <view class="table-header-item">重量(KG)</view>
-      <view class="table-header-item">
-        <t-button theme="primary" variant="text" icon="add" size="mini" wx:if="{{!disabled}}" 
-                 bind:tap="addSpecs" data-section="diameter"></t-button>
-      </view>
-    </view>
-    
-    <view class="table-body">
-      <view class="table-body-item" wx:for="{{diameterData}}" wx:key="index">
-        <!-- 渠道 -->
-        <view class="table-body-item-box" bindtap="selectChannel" 
-              data-section="diameter" data-index="{{index}}">
-          <text class="font14">{{item.saleChannelName || '请选择'}}</text>
-          <t-icon name="caret-down-small" size="48rpx" />
-        </view>
-        
-        <!-- 规格 -->
-        <view class="table-body-item-box" bindtap="selectSpecs"
-              data-section="diameter" data-index="{{index}}">
-          <text class="font14">{{item.specsName || '请选择'}}</text>
-          <t-icon name="caret-down-small" size="48rpx" />
-        </view>
-        
-        <!-- 价格 -->
-        <view class="table-body-item-box" bindtap="showInputDialog"
-              data-section="diameter" data-index="{{index}}" data-type="price"
-              data-value="{{item.unitPrice}}" data-unit="{{varietyUnit[item.varietyUnit] || '元/斤'}}">
-          <text class="font14">{{item.unitPrice || '请输入'}}</text>
-        </view>
-        
-        <!-- 重量 -->
-        <view class="table-body-item-box" bindtap="showInputDialog"
-              data-section="diameter" data-index="{{index}}" data-type="weight"
-              data-value="{{item.weight}}" data-unit="KG">
-          <text class="font14">{{item.weight || '请输入'}}</text>
-        </view>
-        
-        <!-- 删除按钮 -->
-        <view class="table-body-item-box">
-          <t-button theme="danger" variant="text" icon="delete-1-filled" size="mini" 
-                   wx:if="{{!disabled}}" data-section="diameter" data-index="{{index}}"
-                   bind:tap="removeSpecs"></t-button>
-        </view>
-      </view>
-    </view>
-  </view>
-  
-  <!-- 按重量区域 -->
-  <view class="price-section" wx:if="{{showWeight}}">
-    <view class="section-title">按重量</view>
-    
-    <view class="table-header">
-      <view class="table-header-item">渠道</view>
-      <view class="table-header-item">规格</view>
-      <view class="table-header-item">价格</view>
-      <view class="table-header-item">重量(KG)</view>
-      <view class="table-header-item">
-        <t-button theme="primary" variant="text" icon="add" size="mini" wx:if="{{!disabled}}" 
-                 bind:tap="addSpecs" data-section="weight"></t-button>
-      </view>
-    </view>
-    
-    <view class="table-body">
-      <view class="table-body-item" wx:for="{{weightData}}" wx:key="index">
-        <!-- 渠道 -->
-        <view class="table-body-item-box" bindtap="selectChannel" 
-              data-section="weight" data-index="{{index}}">
-          <text class="font14">{{item.saleChannelName || '请选择'}}</text>
-          <t-icon name="caret-down-small" size="48rpx" />
-        </view>
-        
-        <!-- 规格 -->
-        <view class="table-body-item-box" bindtap="selectSpecs"
-              data-section="weight" data-index="{{index}}">
-          <text class="font14">{{item.specsName || '请选择'}}</text>
-          <t-icon name="caret-down-small" size="48rpx" />
-        </view>
-        
-        <!-- 价格 -->
-        <view class="table-body-item-box" bindtap="showInputDialog"
-              data-section="weight" data-index="{{index}}" data-type="price"
-              data-value="{{item.unitPrice}}" data-unit="{{varietyUnit[item.varietyUnit] || '元/斤'}}">
-          <text class="font14">{{item.unitPrice || '请输入'}}</text>
-        </view>
-        
-        <!-- 重量 -->
-        <view class="table-body-item-box" bindtap="showInputDialog"
-              data-section="weight" data-index="{{index}}" data-type="weight"
-              data-value="{{item.weight}}" data-unit="KG">
-          <text class="font14">{{item.weight || '请输入'}}</text>
-        </view>
-        
-        <!-- 删除按钮 -->
-        <view class="table-body-item-box">
-          <t-button theme="danger" variant="text" icon="delete-1-filled" size="mini" 
-                   wx:if="{{!disabled}}" data-section="weight" data-index="{{index}}"
-                   bind:tap="removeSpecs"></t-button>
-        </view>
-      </view>
-    </view>
-  </view>
-  
-  <!-- 统果区域 -->
-  <view class="price-section" wx:if="{{showBulk}}">
-    <view class="section-title">统果</view>
-    
-    <view class="bulk-input">
-      <view class="bulk-item">
-        <view class="bulk-label">价格:</view>
-        <view class="bulk-value" bindtap="showInputDialog" 
-              data-section="bulk" data-type="price" data-value="{{bulkData.price}}" data-unit="元/斤">
-          {{bulkData.price || '请输入'}} 元/斤
-        </view>
-      </view>
-      
-      <view class="bulk-item">
-        <view class="bulk-label">重量:</view>
-        <view class="bulk-value" bindtap="showInputDialog"
-              data-section="bulk" data-type="weight" data-value="{{bulkData.weight}}" data-unit="KG">
-          {{bulkData.weight || '请输入'}} KG
-        </view>
-      </view>
-    </view>
-  </view>
-  
-  <!-- 价格/重量输入弹窗 -->
-  <t-dialog visible="{{showWithInput}}" 
-           title="请输入{{inputType === 'price' ? '价格' : '重量'}}" 
-           confirm-btn="确定" 
-           cancel-btn="取消" 
-           bind:confirm="closeDialog" 
-           bind:cancel="closeDialog">
-    <t-input suffix="{{unit}}" class="dialog-input" clearable slot="content" 
-            type="digit" placeholder="请输入{{inputType === 'price' ? '价格' : '重量'}}" 
-            placeholder-class="placeholder" maxlength="{{8}}"
-            value="{{inputType === 'price' ? unitPrice : weight}}" 
-            bind:change="onInput" 
-            bind:clear="onInputClear" />
-  </t-dialog>
+	<!-- 复选框区域 -->
+	<view class="checkbox-area">
+		<view class="checkbox-item">
+			<checkbox checked="{{showDiameter}}" bindtap="toggleSection" data-section="Diameter" />
+			<text>按果径</text>
+		</view>
+		<view class="checkbox-item">
+			<checkbox checked="{{showWeight}}" bindtap="toggleSection" data-section="Weight" />
+			<text>按重量</text>
+		</view>
+		<view class="checkbox-item">
+			<checkbox checked="{{showBulk}}" bindtap="toggleSection" data-section="Bulk" />
+			<text>统果</text>
+		</view>
+	</view>
+
+	<!-- 按果径区域 -->
+	<view class="price-section" wx:if="{{showDiameter}}">
+		<view class="section-title">按果径</view>
+
+		<view class="table-header">
+			<view class="table-header-item">渠道</view>
+			<view class="table-header-item">规格</view>
+			<view class="table-header-item">价格</view>
+			<view class="table-header-item">重量(KG)</view>
+			<view class="table-header-item">
+				<t-button
+				 theme="primary"
+				 variant="text"
+				 icon="add"
+				 size="mini"
+				 wx:if="{{!disabled}}"
+				 bind:tap="addSpecs"
+				 data-section="diameter"
+				/>
+			</view>
+		</view>
+
+		<view class="table-body">
+			<view class="table-body-item" wx:for="{{diameterData}}" wx:key="index">
+				<!-- 渠道 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="selectChannel"
+				 data-section="diameter"
+				 data-index="{{index}}"
+				>
+					<text class="font14">{{item.saleChannelName || '请选择'}}</text>
+					<t-icon name="caret-down-small" size="48rpx" />
+				</view>
+
+				<!-- 规格 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="selectSpecs"
+				 data-section="diameter"
+				 data-index="{{index}}"
+				>
+					<text class="font14">{{item.specsName || '请选择'}}</text>
+					<t-icon name="caret-down-small" size="48rpx" />
+				</view>
+
+				<!-- 价格 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="showInputDialog"
+				 data-section="diameter"
+				 data-index="{{index}}"
+				 data-type="price"
+				 data-value="{{item.unitPrice}}"
+				 data-unit="{{varietyUnit[item.varietyUnit] || '元/斤'}}"
+				>
+					<text class="font14">{{item.unitPrice || '请输入'}}</text>
+				</view>
+
+				<!-- 重量 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="showInputDialog"
+				 data-section="diameter"
+				 data-index="{{index}}"
+				 data-type="weight"
+				 data-value="{{item.weight}}"
+				 data-unit="KG"
+				>
+					<text class="font14">{{item.weight || '请输入'}}</text>
+				</view>
+
+				<!-- 删除按钮 -->
+				<view class="table-body-item-box">
+					<t-button
+					 theme="danger"
+					 variant="text"
+					 icon="delete-1-filled"
+					 size="mini"
+					 wx:if="{{!disabled}}"
+					 data-section="diameter"
+					 data-index="{{index}}"
+					 bind:tap="removeSpecs"
+					/>
+				</view>
+			</view>
+		</view>
+	</view>
+
+	<!-- 按重量区域 -->
+	<view class="price-section" wx:if="{{showWeight}}">
+		<view class="section-title">按重量</view>
+
+		<view class="table-header">
+			<view class="table-header-item">渠道</view>
+			<view class="table-header-item">规格</view>
+			<view class="table-header-item">价格</view>
+			<view class="table-header-item">重量(KG)</view>
+			<view class="table-header-item">
+				<t-button
+				 theme="primary"
+				 variant="text"
+				 icon="add"
+				 size="mini"
+				 wx:if="{{!disabled}}"
+				 bind:tap="addSpecs"
+				 data-section="weight"
+				/>
+			</view>
+		</view>
+
+		<view class="table-body">
+			<view class="table-body-item" wx:for="{{weightData}}" wx:key="index">
+				<!-- 渠道 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="selectChannel"
+				 data-section="weight"
+				 data-index="{{index}}"
+				>
+					<text class="font14">{{item.saleChannelName || '请选择'}}</text>
+					<t-icon name="caret-down-small" size="48rpx" />
+				</view>
+
+				<!-- 规格 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="selectSpecs"
+				 data-section="weight"
+				 data-index="{{index}}"
+				>
+					<text class="font14">{{item.specsName || '请选择'}}</text>
+					<t-icon name="caret-down-small" size="48rpx" />
+				</view>
+
+				<!-- 价格 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="showInputDialog"
+				 data-section="weight"
+				 data-index="{{index}}"
+				 data-type="price"
+				 data-value="{{item.unitPrice}}"
+				 data-unit="{{varietyUnit[item.varietyUnit] || '元/斤'}}"
+				>
+					<text class="font14">{{item.unitPrice || '请输入'}}</text>
+				</view>
+
+				<!-- 重量 -->
+				<view
+				 class="table-body-item-box"
+				 bindtap="showInputDialog"
+				 data-section="weight"
+				 data-index="{{index}}"
+				 data-type="weight"
+				 data-value="{{item.weight}}"
+				 data-unit="KG"
+				>
+					<text class="font14">{{item.weight || '请输入'}}</text>
+				</view>
+
+				<!-- 删除按钮 -->
+				<view class="table-body-item-box">
+					<t-button
+					 theme="danger"
+					 variant="text"
+					 icon="delete-1-filled"
+					 size="mini"
+					 wx:if="{{!disabled}}"
+					 data-section="weight"
+					 data-index="{{index}}"
+					 bind:tap="removeSpecs"
+					/>
+				</view>
+			</view>
+		</view>
+	</view>
+
+	<!-- 统果区域 -->
+	<view class="price-section" wx:if="{{showBulk}}">
+		<view class="section-title">统果</view>
+
+		<view class="bulk-input">
+			<view class="bulk-item">
+				<view class="bulk-label">价格:</view>
+				<view
+				 class="bulk-value"
+				 bindtap="showInputDialog"
+				 data-section="bulk"
+				 data-type="price"
+				 data-value="{{bulkData.price}}"
+				 data-unit="元/斤"
+				>
+					{{bulkData.price || '请输入'}} 元/斤
+				</view>
+			</view>
+
+			<view class="bulk-item">
+				<view class="bulk-label">重量:</view>
+				<view
+				 class="bulk-value"
+				 bindtap="showInputDialog"
+				 data-section="bulk"
+				 data-type="weight"
+				 data-value="{{bulkData.weight}}"
+				 data-unit="KG"
+				>
+					{{bulkData.weight || '请输入'}} KG
+				</view>
+			</view>
+		</view>
+	</view>
+
+	<!-- 价格/重量输入弹窗 -->
+	<t-dialog
+	 visible="{{showWithInput}}"
+	 title="请输入{{inputType === 'price' ? '价格' : '重量'}}"
+	 confirm-btn="确定"
+	 cancel-btn="取消"
+	 bind:confirm="closeDialog"
+	 bind:cancel="closeDialog"
+	>
+		<t-input
+		 suffix="{{unit}}"
+		 class="dialog-input"
+		 clearable
+		 slot="content"
+		 type="digit"
+		 placeholder="请输入{{inputType === 'price' ? '价格' : '重量'}}"
+		 placeholder-class="placeholder"
+		 maxlength="{{8}}"
+		 value="{{inputType === 'price' ? unitPrice : weight}}"
+		 bind:change="onInput"
+		 bind:clear="onInputClear"
+		/>
+	</t-dialog>
 </view>
+

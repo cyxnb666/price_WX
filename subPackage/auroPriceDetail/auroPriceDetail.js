@@ -230,7 +230,6 @@ Page({
         varieties: res
       });
 
-      // Auto-select the first variety if no variety is already selected
       if (res.length > 0 && !this.data.pricingDetail.varietyId) {
         const firstVariety = res[0];
         this.setData({
@@ -238,13 +237,10 @@ Page({
           'pricingDetail.varietyName': firstVariety.varietyName
         });
 
-        // After selecting a variety, fetch its categories
         this.fetchCategories(firstVariety.varietyId);
 
-        // Call setPickerData to get the specs for this variety
         this.setPickerData(firstVariety.varietyId, true);
       } else if (this.data.pricingDetail.varietyId) {
-        // If a variety is already selected, fetch its categories
         this.fetchCategories(this.data.pricingDetail.varietyId);
       }
     }).finally(() => {
@@ -264,7 +260,6 @@ Page({
     };
 
     ownerSelectCategories(params).then((res) => {
-      // Just store the original data, keeping collectStatus 
       this.setData({
         categories: res.map(item => ({
           ...item,
@@ -586,16 +581,13 @@ Page({
       "pricingDetail.varietyName": e.currentTarget.dataset.varietyname,
     })
 
-    // Instead of getting categories from local data, fetch them from API
     this.fetchCategories(varietyId);
 
-    // We still need to call setPickerData to get the specs for this variety
     this.setPickerData(varietyId, true);
   },
 
   setPickerData(key, flag) {
     if (this.data.pickerKay === 'varietyId') {
-      // Get specs data - we'll keep using selectVarietySpecss for this
       const params = {
         primaryKey: key
       }
@@ -645,9 +637,7 @@ Page({
       pickerKay: key,
     })
 
-    // Check if categories are already loaded
     if (this.data.categories && this.data.categories.length > 0) {
-      // Use existing categories for the picker
       this.setData({
         pickerOptions: this.data.categories.map(item => {
           return {
@@ -660,7 +650,6 @@ Page({
         pickerVisible: true,
       })
     } else {
-      // Fetch categories if not available
       this.fetchCategories(this.data.pricingDetail.varietyId);
       this.toast('正在加载品种小类', 'loading');
     }
@@ -1103,7 +1092,6 @@ Page({
     };
 
     ownerSelectCategories(params).then((existingCategories) => {
-      // 获取已添加小类的ID列表
       const addedCategoryIds = existingCategories.map(item => item.categoryId);
 
       // 标记可用和不可用的小类
@@ -1138,7 +1126,6 @@ Page({
     });
   },
 
-  // 处理用户选择小类变化
   onCategorySelectionChange(e) {
     console.log('选择的小类：', e.detail.value);
     this.setData({
@@ -1146,7 +1133,6 @@ Page({
     });
   },
 
-  // 确认添加品种小类
   confirmAddCategory() {
     const selectedIds = this.data.selectedCategories;
     const currentVarietyId = this.data.pricingDetail.varietyId;
@@ -1158,7 +1144,6 @@ Page({
 
     console.log('确认添加品种小类：', selectedIds);
 
-    // 构建请求参数
     const items = selectedIds.map(categoryId => {
       return {
         categoryId: categoryId,
@@ -1206,10 +1191,8 @@ Page({
 
     console.log('删除品种小类', collectCategoryId);
 
-    // Show loading toast
     this.toast('正在删除...', 'loading');
 
-    // Call the API to delete the category
     const params = {
       "condition": {
         "primaryKey": collectCategoryId
@@ -1219,7 +1202,6 @@ Page({
     ownerRemoveCollectCategory(params).then((res) => {
       this.toast('删除成功', 'success');
 
-      // Refresh the categories list after successful deletion
       this.fetchCategories(varietyId);
     }).catch(err => {
       console.error('Error deleting category:', err);
@@ -1235,7 +1217,7 @@ Page({
 
     console.log('点击品种小类, collectCategoryId:', collectCategoryId);
 
-    // 导航到categoryDetail页面并传递所有必要参数
+    // 到categoryDetail页面
     wx.navigateTo({
       url: `/subPackage/categoryDetail/categoryDetail?categoryId=${categoryId}&categoryName=${categoryName}&varietyId=${this.data.pricingDetail.varietyId}&varietyName=${this.data.pricingDetail.varietyName}&stallId=${this.data.pricingDetail.stallId}&collectCategoryId=${collectCategoryId}`
     });

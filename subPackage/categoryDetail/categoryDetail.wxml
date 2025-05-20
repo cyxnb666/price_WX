@@ -1,6 +1,4 @@
 <navigation-bar title="{{categoryName}}" back="{{true}}" />
-
-<!-- 使用scroll-view包装整个内容区 -->
 <scroll-view
  scroll-y="true"
  class="category-detail"
@@ -134,11 +132,9 @@
 		</t-swipe-cell>
 	</view>
 
-	<!-- 额外的底部间距 -->
 	<view style="height: 120rpx;" />
 </scroll-view>
 
-<!-- 选择器 -->
 <t-picker
  visible="{{pickerVisible}}"
  value="{{pickerValue}}"
