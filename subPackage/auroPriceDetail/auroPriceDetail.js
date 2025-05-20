@@ -248,7 +248,7 @@ Page({
 
     const params = {
       "condition": {
-        "collectPriceId": this.data.busiId,
+        "collectPriceId": this.data.busiId || this.data.collectPriceId,
         "varietyId": varietyId
       }
     };
@@ -301,44 +301,70 @@ Page({
     })
   },
   getDetails() {
-    let that = this
     const params = {
       condition: {
         primaryKey: this.data.collectPriceId
       }
-    }
+    };
+
     ownergetWxCollecpriceTask(params).then(async (res) => {
-      let obj = {
-        "WEIGHT": 'weightSpecsVos',
-        "DIAMETER": 'diameterSpecsVos',
-      }
-      res.stallId && await this.selectButtomVarietiesFn(res.stallId)
+      // 1. 整理映射相关数据
+      const pricingType = res.specss && res.specss.length > 0
+        ? (res.specss[0] && res.specss[0].specsType
+          ? (res.specss[0].specsType === 'WEIGHT' ? 'weightSpecsVos' : 'diameterSpecsVos')
+          : 'diameterSpecsVos')
+        : 'diameterSpecsVos';
+
+      // 2. 准备要设置的所有数据，一次性设置
       this.setData({
+        // 常规属性
         disabled: ['4', '5'].includes(res.priceStatus),
-        pricingDetail: res,
         busiId: res.collectPriceId,
-        "pricingDetail.priceType": res.priceType || 'FARMER_SALE_PRICE',
-        "pricingDetail.specss": res.specss || [],
-        pickerKay: 'varietyId',
-        specss: res.specss,
-        "pricingDetail.collectFileIds": res.collectFileIds.map(v => v.fileId) || [],
-        "pricingDetail.priceFileIds": res.priceFileIds.map(v => v.fileId) || [],
-        pricingType: res.specss.length ? obj[res.specss[0] ? res.specss[0].specsType : ''] : 'diameterSpecsVos'
+        pricingType: pricingType,
+        specss: res.specss || [],
+
+        // 集中处理 pricingDetail 对象
+        pricingDetail: {
+          ...res,  // 保留原始属性
+          priceType: res.priceType || 'FARMER_SALE_PRICE',
+          specss: res.specss || [],
+          collectFileIds: res.collectFileIds ? res.collectFileIds.map(v => v.fileId) : [],
+          priceFileIds: res.priceFileIds ? res.priceFileIds.map(v => v.fileId) : []
+        }
       }, () => {
+        // 回调函数中处理依赖于状态更新后的操作
+        const that = this;
+
+        // 处理类别数据
         setTimeout(() => {
           that.setData({
-            "categories": that.data.varieties.filter(v => v.varietyId === that.data.pricingDetail.varietyId)[0] ? that.data.varieties.filter(v => v.varietyId === that.data.pricingDetail.varietyId)[0].categories : [],
-          })
-          console.log(that.data.categories, 'categories===')
-        }, 200)
-        this.data.pricingDetail.varietyId && this.setPickerData(this.data.pricingDetail.varietyId)
-        console.log(this.data.pricingDetail.specss)
-      })
+            categories: that.data.varieties.filter(v => v.varietyId === that.data.pricingDetail.varietyId)[0]
+              ? that.data.varieties.filter(v => v.varietyId === that.data.pricingDetail.varietyId)[0].categories
+              : []
+          });
+          console.log(that.data.categories, 'categories===');
+        }, 200);
+
+        // 设置选择器数据
+        if (this.data.pricingDetail.varietyId) {
+          this.setPickerData(this.data.pricingDetail.varietyId);
+        }
+
+        console.log('pricingDetail specss:', this.data.pricingDetail.specss);
+      });
+
+      // 如果有必要在 stallId 存在的情况下执行 selectButtomVarietiesFn
+      if (res.stallId) {
+        await this.selectButtomVarietiesFn(res.stallId);
+      }
+    }).catch(err => {
+      console.error('获取详情失败:', err);
+      this.toast('获取详情失败', 'error');
     }).finally(() => {
       this.setData({
         refresherTriggered: false
-      })
-    })
+      });
+    });
   },
   bindRefresh() {
     if (this.data.collectPriceId) this.getDetails();
@@ -1199,7 +1225,6 @@ Page({
       this.fetchCategories(varietyId);
     }).catch(err => {
       console.error('Error deleting category:', err);
-      this.toast('删除失败', 'error');
     });
   },
 
