@@ -83,7 +83,7 @@
 	</view>
 
 	<!-- 采价记录部分 -->
-	<view class="record-section">
+	<!-- <view class="record-section">
 		<t-cell title="采价记录">
 			<view slot="description">
 				<view class="tips">
@@ -130,7 +130,7 @@
 			>删除
 			</view>
 		</t-swipe-cell>
-	</view>
+	</view> -->
 
 	<view style="height: 120rpx;" />
 </scroll-view>

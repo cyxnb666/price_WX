@@ -29,15 +29,9 @@ import dayjs from 'dayjs';
 
 const now = dayjs().locale('zh-cn');
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     priceTypes: {
-      'LAND_OFF': '离地价',
-      'MARKET': '市场价',
-      'WHOLESALE': '批发价'
+      'FARMER_SALE_PRICE': '离地价',
     },
     showCategoryDialog: false,
     availableCategories: [], // 可用于添加的小类
@@ -75,7 +69,7 @@ Page({
       varietyId: '',
       linkerName: '',
       linkerMobile: '',
-      priceType: 'LAND_OFF',
+      priceType: 'FARMER_SALE_PRICE',
       specss: [{
         fvSpecsMax: 0,
         fvSpecsMin: 0,
@@ -225,7 +219,7 @@ Page({
         "primaryKey": this.data.stallId || stallId
       }
     }
-    selectStallFruiveggies(params).then((res) => {
+    return selectStallFruiveggies(params).then((res) => {
       this.setData({
         varieties: res
       });
@@ -252,9 +246,11 @@ Page({
   fetchCategories(varietyId) {
     if (!varietyId) return;
 
+    const collectPriceIdToUse = this.data.busiId || this.data.collectPriceId;
+
     const params = {
       "condition": {
-        "collectPriceId": this.data.busiId,
+        "collectPriceId": collectPriceIdToUse,
         "varietyId": varietyId
       }
     };
@@ -323,7 +319,7 @@ Page({
         disabled: ['4', '5'].includes(res.priceStatus),
         pricingDetail: res,
         busiId: res.collectPriceId,
-        "pricingDetail.priceType": res.priceType || 'LAND_OFF',
+        "pricingDetail.priceType": res.priceType || 'FARMER_SALE_PRICE',
         "pricingDetail.specss": res.specss || [],
         pickerKay: 'varietyId',
         specss: res.specss,

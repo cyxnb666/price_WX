@@ -209,6 +209,29 @@ Page({
                 });
             }
 
+            let priceFileIds = [];
+            let collectFileIds = [];
+
+            // 检查并处理priceFileIds
+            if (res.priceFileIds && Array.isArray(res.priceFileIds)) {
+                if (res.priceFileIds.length > 0 && typeof res.priceFileIds[0] === 'object') {
+                    // 如果是对象数组，提取fileId
+                    priceFileIds = res.priceFileIds.map(file => file.fileId);
+                } else {
+                    // 如果已经是字符串数组，直接使用
+                    priceFileIds = res.priceFileIds;
+                }
+            }
+            if (res.collectFileIds && Array.isArray(res.collectFileIds)) {
+                if (res.collectFileIds.length > 0 && typeof res.collectFileIds[0] === 'object') {
+                    // 如果是对象数组，提取fileId
+                    collectFileIds = res.collectFileIds.map(file => file.fileId);
+                } else {
+                    // 如果已经是字符串数组，直接使用
+                    collectFileIds = res.collectFileIds;
+                }
+            }
+
             // 如果某种类型没有数据，添加一个默认项
             if (diameterData.length === 0) {
                 diameterData.push({
@@ -246,8 +269,8 @@ Page({
                 showDiameter: showDiameter,
                 showWeight: showWeight,
                 showBulk: showBulk,
-                priceFileIds: res.priceFileIds || [],
-                collectFileIds: res.collectFileIds || []
+                priceFileIds: priceFileIds,
+                collectFileIds: collectFileIds
             }, () => {
                 console.log('设置显示状态:', {
                     showDiameter: this.data.showDiameter,
@@ -262,7 +285,9 @@ Page({
                 showBulk,
                 diameterData,
                 weightData,
-                bulkData
+                bulkData,
+                priceFileIds,
+                collectFileIds
             });
 
         }).catch(err => {
