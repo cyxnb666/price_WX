@@ -219,7 +219,7 @@ Page({
         "primaryKey": this.data.stallId || stallId
       }
     }
-    return selectStallFruiveggies(params).then((res) => {
+    selectStallFruiveggies(params).then((res) => {
       this.setData({
         varieties: res
       });
@@ -246,11 +246,9 @@ Page({
   fetchCategories(varietyId) {
     if (!varietyId) return;
 
-    const collectPriceIdToUse = this.data.busiId || this.data.collectPriceId;
-
     const params = {
       "condition": {
-        "collectPriceId": collectPriceIdToUse,
+        "collectPriceId": this.data.busiId,
         "varietyId": varietyId
       }
     };
