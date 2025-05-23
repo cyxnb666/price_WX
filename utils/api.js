@@ -297,3 +297,73 @@ export const saveOwnerCollectCategoryPrice = (data) => instance.post('/owner/sav
  * @returns Promise
  */
 export const getOwnerCollectCategory = (data) => instance.post('/owner/getOwnerCollectCategory', data)
+/**
+ * @description
+ * 价格报送生成任务号
+ * @param {Object} data
+ * @returns Promise
+ */
+export const buildRecordId = (data) => instance.post('/orecord/buildRecordId', data)
+/**
+ * @description 分页查询订购记录列表
+ * @param {Object} data
+ * @returns Promise
+ */
+export const selectOrderRecords = (data) => instance.post('/orecord/selectIOrderRecords', data)
+
+
+
+
+
+
+
+
+/**
+ * @description 获取订购记录详情
+ * @param {Object} data
+ * @returns Promise
+ */
+export const getOrderRecord = (data) => instance.post('/order/getOrderRecord', data)
+
+/**
+ * @description 新增订购记录
+ * @param {Object} data
+ * @returns Promise
+ */
+export const saveOrderRecord = (data) => instance.post('/order/saveOrderRecord', data)
+
+/**
+ * @description 删除订购记录
+ * @param {Object} data
+ * @returns Promise
+ */
+export const removeOrderRecord = (data) => instance.post('/order/removeOrderRecord', data)
+
+/**
+ * @description 更新订购记录状态
+ * @param {Object} data
+ * @returns Promise
+ */
+export const updateOrderStatus = (data) => instance.post('/order/updateOrderStatus', data)
+
+
+/**
+ * @description 生成价格报送任务号
+ * @param {Object} data
+ * @returns Promise
+ */
+export const buildPriceReportId = (data) => instance.post('/priceReport/buildPriceReportId', data)
+
+/**
+ * @description 保存价格报送信息
+ * @param {Object} data
+ * @returns Promise
+ */
+export const savePriceReport = (data) => instance.post('/priceReport/savePriceReport', data)
+
+/**
+ * @description 获取价格报送详情
+ * @param {Object} data
+ * @returns Promise
+ */
+export const getPriceReportDetail = (data) => instance.post('/priceReport/getPriceReportDetail', data)

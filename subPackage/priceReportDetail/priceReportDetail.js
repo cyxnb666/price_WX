@@ -1,15 +1,14 @@
 // priceReportDetail.js
 import {
-  selectStallFruiveggies,
+  selectButtomVarieties,
   regeo,
-  buildPriceReportId,
+  buildRecordId,
   savePriceReport,
   getPriceReportDetail,
   selectVarietySpecss,
   queryTypeDicts,
   filepreview,
   softRemoveFile,
-  selectCurrentStall
 } from "../../utils/api";
 import {
   Toast
@@ -127,7 +126,7 @@ Page({
   async initNewReport() {
     try {
       // 1. 生成唯一ID
-      const busiId = await buildPriceReportId({});
+      const busiId = await buildRecordId({});
       this.setData({ busiId });
       
       // 2. 获取当前农户的果园信息和品种大类
@@ -192,35 +191,28 @@ Page({
     }
   },
   
-  async getVarietiesList() {
+async getVarietiesList() {
     try {
-      // 获取当前农户的果园信息
-      const stallRes = await selectCurrentStall({});
-      if (stallRes && stallRes.stallId) {
-        // 根据果园ID获取品种大类
-        const params = {
-          condition: {
-            primaryKey: stallRes.stallId
-          }
-        };
-        const varietiesRes = await selectStallFruiveggies(params);
-        
+      const params = {
+        condition: {}
+      };
+      const varietiesRes = await selectButtomVarieties(params);
+      
+      this.setData({
+        varieties: varietiesRes
+      });
+      
+      // 默认选择第一个品种大类
+      if (varietiesRes.length > 0) {
+        const firstVariety = varietiesRes[0];
         this.setData({
-          varieties: varietiesRes
+          'priceReportDetail.varietyId': firstVariety.varietyId,
+          'priceReportDetail.varietyName': firstVariety.varietyName,
+          categories: firstVariety.categories || []
         });
         
-        // 默认选择第一个品种大类
-        if (varietiesRes.length > 0) {
-          const firstVariety = varietiesRes[0];
-          this.setData({
-            'priceReportDetail.varietyId': firstVariety.varietyId,
-            'priceReportDetail.varietyName': firstVariety.varietyName,
-            categories: firstVariety.categories || []
-          });
-          
-          // 获取规格数据
-          await this.getSpecsList(firstVariety.varietyId);
-        }
+        // 获取规格数据
+        await this.getSpecsList(firstVariety.varietyId);
       }
     } catch (err) {
       console.error('获取品种列表失败:', err);
@@ -381,7 +373,7 @@ Page({
     
     // 找到对应品种的小类
     const selectedVariety = this.data.varieties.find(v => v.varietyId === varietyId);
-    const categories = selectedVariety ? selectedVariety.categories : [];
+    const categories = selectedVariety ? selectedVariety.categories || [] : [];
     
     this.setData({
       'priceReportDetail.varietyId': varietyId,
