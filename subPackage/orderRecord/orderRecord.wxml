@@ -1,0 +1,90 @@
+<!--orderRecord.wxml-->
+<navigation-bar title="订购记录" back="{{true}}" path="/pages/home/home"></navigation-bar>
+<t-pull-down-refresh 
+  class="orderRecord" 
+  show-scrollbar="{{false}}" 
+  value="{{refresherTriggered}}" 
+  loadingTexts="{{['下拉刷新', '松手刷新', '正在刷新', '刷新完成']}}" 
+  usingCustomNavbar 
+  bind:refresh="onSearch" 
+  bind:scrolltolower="pageTurning">
+  
+  <view class="queryBox">
+    <t-dropdown-menu>
+      <t-dropdown-item 
+        options="{{statusOptions}}" 
+        placement="right" 
+        value="{{queryForm.condition.status}}" 
+        bindchange="onChange" />
+      <t-input 
+        placeholder="输入商品名称查询" 
+        value="{{queryForm.condition.productName}}" 
+        bindblur="bindBlur" />
+    </t-dropdown-menu>
+  </view>
+  
+  <view class="orderRecordList">
+    <block wx:for="{{orderRecordList}}" wx:key="index">
+      <t-swipe-cell opened="{{cellOpend}}" disabled="{{item.orderStatus !== '1' && item.orderStatus !== '2'}}">
+        <view class="orderRecordItem" data-item="{{item}}" bindtap="toDetail">
+          <view class="orderRecordItem-header">
+            <view class="orderRecordItem-header-left">
+              {{item.productName}}
+            </view>
+            <t-tag 
+              variant="dark" 
+              style="{{item.orderStatus == '3' ? 'background-color: #CCEDAA;color:#000;border:none' : ''}}" 
+              theme="{{orderStatusColor[item.orderStatus]}}">
+              {{orderStatus[item.orderStatus]}}
+            </t-tag>
+          </view>
+          <view class="orderRecordItem-body">
+            <view class="orderRecordItem-body-item">
+              <view class="orderRecordItem-body-item-title">订购数量:</view>
+              <view class="orderRecordItem-body-item-content">{{item.quantity}}{{item.unit}}</view>
+            </view>
+            <view class="orderRecordItem-body-item">
+              <view class="orderRecordItem-body-item-title">订购价格:</view>
+              <view class="orderRecordItem-body-item-content">¥{{item.price}}/{{item.unit}}</view>
+            </view>
+            <view class="orderRecordItem-body-item">
+              <view class="orderRecordItem-body-item-title">订购时间:</view>
+              <view class="orderRecordItem-body-item-content">{{item.orderDate}}</view>
+            </view>
+            <view class="orderRecordItem-body-item" wx:if="{{item.deliveryTime && item.orderStatus != '1'}}">
+              <view class="orderRecordItem-body-item-title">预计交付时间:</view>
+              <view class="orderRecordItem-body-item-content">{{item.deliveryTime}}</view>
+            </view>
+          </view>
+        </view>
+        <t-button 
+          theme="danger" 
+          class="dle-btn" 
+          data-item="{{item}}" 
+          size="large" 
+          slot="right" 
+          bindtap="onDelete">
+          {{ item.orderStatus == '1' ? "取消订单" : "删除记录" }}
+        </t-button>
+      </t-swipe-cell>
+    </block>
+  </view>
+  <view class="nothingMore">暂无更多</view>
+</t-pull-down-refresh>
+
+<t-dialog
+  visible="{{showConfirm}}"
+  title="{{orderItem.orderStatus == '1' ? '取消订购记录?' : '删除订购记录?'}}"
+  content="{{orderItem.orderStatus == '1' ? '请确认是否取消订购记录?' : '请确认是否删除订购记录?'}}"
+  confirm-btn="{{ confirmBtn }}"
+  cancel-btn="取消"
+  bind:confirm="closeDialog"
+  bind:cancel="closeDialog"
+/>
+<t-toast id="t-toast"/>
+
+<view class="operation">
+  <view class="operation-btn-box">
+    <t-button class="operation-btn" theme="primary" bind:tap="submit">新增订购记录</t-button>
+  </view>
+</view>

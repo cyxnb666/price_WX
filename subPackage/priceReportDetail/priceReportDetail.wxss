@@ -1,0 +1,74 @@
+/* priceReportDetail.wxss */
+page {
+  height: 100%;
+  width: 100%;
+  --td-cell-title-color: #42AEFA !important;
+  --td-cell-note-color: #333333 !important;
+}
+
+.priceReportDetail {
+  height: calc(100vh - 190px) !important;
+  width: 100%;
+  background-color: #F2F2F2FF;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.priceReportDetail-container {
+  background-color: #ffffff;
+  border-radius: 8rpx;
+}
+
+.margin-16 {
+  margin: 16rpx;
+}
+
+.operation {
+  padding: 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  --td-button-primary-bg-color: #1989FA !important;
+  --td-button-primary-border-color: #1989FA !important;
+  --td-button-primary-outline-border-color: #1989FA !important;
+  --td-button-primary-outline-color: #1989FA !important;
+}
+
+.operation-btn-box {
+  width: calc(50% - 20rpx);
+}
+
+.operation-btn {
+  width: 100%;
+}
+
+.custom-navbar {
+  --td-navbar-color: #fff !important;
+  --td-navbar-bg-color: #7393FF !important;
+}
+
+.evidence-section {
+  background-color: #ffffff;
+  margin-top: 20rpx;
+  border-radius: 8rpx;
+}
+
+.tips {
+  color: #E26F11;
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 40rpx;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #e34d59;
+}
